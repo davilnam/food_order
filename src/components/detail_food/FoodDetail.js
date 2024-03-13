@@ -8,6 +8,7 @@ import Comment from "./Comments";
 import "../../styles/css/detail.css";
 
 const FoodDetail = () => {
+  const staticUrl = "http://localhost:8080/api/home/file";
   const [foodDetail, setFoodDetail] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -25,7 +26,7 @@ const FoodDetail = () => {
 
   const fetchFoodDetail = async (id) => {
     try {
-      const response = await fetch(`http://localhost:4000/foodDetail/${id}`);
+      const response = await fetch(`http://localhost:8080/api/food/get-detail/${id}`);
       const data = await response.json();
       setFoodDetail(data);
     } catch (error) {
@@ -86,7 +87,7 @@ const FoodDetail = () => {
                   className="menu-img img"
                   style={{
                     height: "100%",
-                    backgroundImage: `url(${require(`../../assets/images/${foodDetail.image}`)})`,
+                    backgroundImage: `url(${staticUrl}/food/${food.image})`,
                   }}
                 ></div>
               </div>

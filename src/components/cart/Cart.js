@@ -4,6 +4,7 @@ import { removeFromCart } from "../../actions/actions";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
+  const staticUrl = "http://localhost:8080/api/home/file";
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.app.cartItems);
 
@@ -59,7 +60,7 @@ const Cart = () => {
             <tr key={item.id}>
               <td>
                 <img
-                  src={require(`../../assets/images/${item.image}`)}
+                  src={`${staticUrl}/food/${item.image}`}
                   alt={item.name}
                   className="img-fluid"
                   style={{ maxWidth: "100px" }}

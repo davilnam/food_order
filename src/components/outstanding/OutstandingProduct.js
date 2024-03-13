@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../actions/actions"; // Import action addToCart
 
 const OutstandingProduct = () => {
+  const staticUrl = "http://localhost:8080/api/home/file";
   const dispatch = useDispatch();
   const [categories, setCategories] = useState([]);
 
@@ -12,7 +13,7 @@ const OutstandingProduct = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:4000/category");
+      const response = await fetch("http://localhost:8080/api/home/category");
       const data = await response.json();
       setCategories(data.data);
     } catch (error) {
@@ -48,7 +49,7 @@ const OutstandingProduct = () => {
                       foodIndex % 2 !== 0 ? "order-md-last" : ""
                     }`}
                     style={{
-                      backgroundImage: `url(${require(`../../assets/images/${food.image}`)})`,
+                      backgroundImage: `url(${staticUrl}/food/${food.image})`,
                     }}
                   ></div>
                   <div className="text d-flex align-items-center productBody">

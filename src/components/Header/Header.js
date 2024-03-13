@@ -9,7 +9,6 @@ import "../../styles/css/header.css"
 const Header = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const cartItems = useSelector(state => state.app.cartItems); // Lấy số lượng sản phẩm trong giỏ hàng từ Redux store
-
   const toggleMobileMenu = () => {
     setShowMobileMenu(!showMobileMenu);
   };
