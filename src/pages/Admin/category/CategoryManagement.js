@@ -1,0 +1,229 @@
+import React, { useState, useEffect } from "react";
+import ModalAddCategory from "./ModalAddCategory";
+import ModalEditCategory from "./ModalEditCategory";
+import ModalDeleteCategory from "./ModalDeleteCategory";
+import HeaderAdmin from "../Layout/HeaderAdmin";
+import { FaTrash, FaPencilAlt, FaSearch } from "react-icons/fa";
+
+const CategoryManagement = () => {
+  const [categories, setCategories] = useState([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [category, setCategory] = useState(null);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = () => {
+    fetch("http://localhost:4000/category")
+      .then((response) => response.json())
+      .then((data) => {
+        setCategories(data.data);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  };
+
+  const handleAddCategory = async (categoryName) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:4000/category", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name: categoryName }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to add category");
+      }
+      setShowAddModal(false);
+      fetchCategories();
+    } catch (error) {
+      console.error("Error adding category:", error);
+    }
+  };
+
+  const handleUpdateCategory = async (category) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:4000/category/${category.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: category.name,
+          newName: category.newName,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update category");
+      }
+      setShowEditModal(false);
+      fetchCategories();
+    } catch (error) {
+      console.error("Error updating category:", error);
+    }
+  };
+
+  const handleDeleteCategory = async (category) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:4000/category/${category.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name: category.name,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to delete category");
+      }
+      setShowDeleteModal(false);
+      fetchCategories();
+    } catch (error) {
+      console.error("Error deleting category:", error);
+    }
+  };
+
+  const handleEditButtonClick = (category) => {
+    setShowEditModal(true);
+    setCategory(category);
+  };
+
+  const handleDeleteButtonClick = (category) => {
+    setShowDeleteModal(true);
+    setCategory(category);
+  };
+
+  const handleAddButtonClick = () => {
+    setShowAddModal(true);
+  };
+
+  const toggleAddModal = () => {
+    setShowAddModal(!showAddModal);
+  };
+  const toggleEditModal = () => {
+    setShowEditModal(!showEditModal);
+  };
+  const toggleDeleteModal = () => {
+    setShowDeleteModal(!showDeleteModal);
+  };
+
+  return (
+    <div className="content">
+      <HeaderAdmin></HeaderAdmin>
+      <div className="container-fluid pt-4 px-4">
+        <div>
+          <h3>Quản lý Danh Mục</h3>
+          <div className="d-flex align-items-center justify-content-between">
+            <ModalAddCategory
+              isOpen={showAddModal}
+              toggle={toggleAddModal}
+              handleSave={handleAddCategory}
+            />
+            <button
+              type="button"
+              className="btn btn-primary"
+              id="addModalBtn"
+              onClick={handleAddButtonClick}
+            >
+              Thêm mới danh mục
+            </button>
+            <form
+              id="searchForm"
+              className="input-group justify-content-end"
+              style={{ width: "40%" }}
+            >
+              <input
+                type="text"
+                id="searchInput"
+                className="form-control"
+                placeholder="Tìm theo tên danh mục"
+              />
+              <div className="input-group-append">
+                <button
+                  type="button"
+                  id="searchBtn"
+                  className="btn btn-primary"
+                >
+                  <FaSearch />
+                </button>
+              </div>
+            </form>
+          </div>
+          <hr />
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Mã danh mục</th>
+                <th>Tên Danh mục</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {categories.map((category, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td className="categoryName">{category.name}</td>
+                  <td>
+                    <button
+                      className="btn btn-primary editModalBtn"
+                      data-category-name={category.name}
+                      onClick={() =>
+                        handleEditButtonClick({
+                          id: index + 1,
+                          name: category.name,
+                        })
+                      }
+                    >
+                      <FaPencilAlt></FaPencilAlt>
+                    </button>
+                    <button
+                      className="btn btn-danger deleteModalBtn"
+                      onClick={() =>
+                        handleDeleteButtonClick({
+                          id: index + 1,
+                          name: category.name,
+                        })
+                      }
+                    >
+                      <FaTrash />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {showEditModal && (
+        <ModalEditCategory
+          isOpen={showEditModal}
+          toggle={toggleEditModal}
+          category={category}
+          handleUpdate={handleUpdateCategory}
+        />
+      )}
+      {showDeleteModal && (
+        <ModalDeleteCategory
+          isOpen={showDeleteModal}
+          toggle={toggleDeleteModal}
+          category={category}
+          handleDelete={handleDeleteCategory}
+        />
+      )}
+    </div>
+  );
+};
+
+export default CategoryManagement;
