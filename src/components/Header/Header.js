@@ -4,15 +4,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaBars, FaShoppingCart } from "react-icons/fa";
 import { faPhoneAlt, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
-import "../../styles/css/header.css"
+import "../../styles/css/header.css";
 
 const Header = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const cartItems = useSelector(state => state.app.cartItems); // Lấy số lượng sản phẩm trong giỏ hàng từ Redux store
-
+  const cartItems = useSelector((state) => state.app.cartItems); // Lấy số lượng sản phẩm trong giỏ hàng từ Redux store
+  const { user, isLoggedIn } = useSelector((state) => state.app);
   const toggleMobileMenu = () => {
     setShowMobileMenu(!showMobileMenu);
   };
+
+  const handleLogout = () => {
+    // goi api dang xuat    
+  }
 
   return (
     <>
@@ -132,49 +136,64 @@ const Header = () => {
                 </NavLink>
               </li>
             </ul>
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <NavLink
-                  to="/login"
-                  className={({ isActive }) => {
-                    const activeClass = isActive ? "activeHome" : "";
-                    return `nav-link ${activeClass}`;
-                  }}
-                >
-                  Đăng nhập
-                </NavLink>
-              </li>
-              {/* <li className="nav-item">
-                <NavLink
-                  to="/register"
-                  className={({ isActive }) => {
-                    const activeClass = isActive ? "activeHome" : "";
-                    return `nav-link ${activeClass}`;
-                  }}
-                >
-                  Đăng ký
-                </NavLink>
-              </li> */}
-              <li className="nav-item">
-                <NavLink to="/cart" className="nav-link">
-                  <div
-                    className="cart-icon"
-                    style={{
-                      height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <FaShoppingCart size={24}/>
-                    {cartItems && (
-                      <div className="cart-item-count">
-                        <span>{cartItems.length}</span>
-                      </div>
-                    )}
-                  </div>
-                </NavLink>
-              </li>
-            </ul>
+            {isLoggedIn ? (
+              <ul className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <span className="nav-link">{user}</span>
+                </li>
+                <li className="nav-item">
+                  <button className="nav-link" onClick={handleLogout}>
+                    Đăng xuất
+                  </button>
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/cart" className="nav-link">
+                    <div
+                      className="cart-icon"
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <FaShoppingCart size={24} />
+                      {cartItems && (
+                        <div className="cart-item-count">
+                          <span>{cartItems.length}</span>
+                        </div>
+                      )}
+                    </div>
+                  </NavLink>
+                </li>
+              </ul>
+            ) : (
+              <ul className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <NavLink to="/login" className="nav-link">
+                    Đăng nhập
+                  </NavLink>
+                </li>                
+                <li className="nav-item">
+                  <NavLink to="/cart" className="nav-link">
+                    <div
+                      className="cart-icon"
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <FaShoppingCart size={24} />
+                      {cartItems && (
+                        <div className="cart-item-count">
+                          <span>{cartItems.length}</span>
+                        </div>
+                      )}
+                    </div>
+                  </NavLink>
+                </li>
+              </ul>
+            )}            
           </div>
         </div>
       </nav>

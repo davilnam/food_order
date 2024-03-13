@@ -48,7 +48,7 @@ const Login = () => {
 
       // Điều hướng người dùng đến trang phù hợp dựa vào desc
       if (data.desc === "[ADMIN]") {
-        navigate("/admin");
+        navigate("/admin/dashboard");
       } else {
         navigate("/");
       }

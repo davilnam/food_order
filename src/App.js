@@ -23,8 +23,8 @@ import LayoutUser from "./pages/LayoutUser";
 const App = () => {
   // Lấy giá trị isLoggedIn và isAdmin từ reducer
   let { isLoggedIn, isAdmin } = useSelector(state => state.app);
-  // isAdmin = true;
-  // isLoggedIn = true;
+  isAdmin = true;
+  isLoggedIn = true;
 
   return (
     <Routes>
@@ -44,7 +44,7 @@ const App = () => {
         <Route path="*" element={<Navigate to="/not-found" />} />
       </Route>
       {isLoggedIn && isAdmin && (
-        <Route path="/admin/*" element={<Layout />}>
+        <Route path="/admin" element={<Layout />}>
           <Route path="dashboard" element={<DashBoard />}></Route>
           <Route path="managerOrder" element={<OrderManagement />}></Route>
           <Route path="managerAccount" element={<AccountManagement />}></Route>
