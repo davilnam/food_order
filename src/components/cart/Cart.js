@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart, saveCurrentPath } from "../../actions/actions";
+import { removeFromCart, saveCurrentPath, updateCartItemQuantity } from "../../actions/actions";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
@@ -35,6 +35,7 @@ const Cart = () => {
 
   const handleQuantityChange = (id, quantity) => {
     setItemQuantities({ ...itemQuantities, [id]: quantity }); // Cập nhật số lượng sản phẩm
+    dispatch(updateCartItemQuantity(id, quantity));
   };
 
   const handleRemoveFromCart = (id) => {

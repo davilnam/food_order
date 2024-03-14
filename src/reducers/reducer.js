@@ -5,6 +5,7 @@ import {
   LOGOUT,
   ADD_TO_CART,
   REMOVE_FROM_CART,
+  UPDATE_CART_ITEM_QUANTITY
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -74,6 +75,15 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         currentPath: action.payload,
+      };
+      case UPDATE_CART_ITEM_QUANTITY:
+      return {
+        ...state,
+        cartItems: state.cartItems.map(item =>
+          item.id === action.payload.itemId
+            ? { ...item, quantity: action.payload.quantity }
+            : item
+        )
       };
     default:
       return state;
