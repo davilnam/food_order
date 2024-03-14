@@ -98,10 +98,10 @@ const Cart = () => {
       </div>
       <div className="text-right pb-5">
         <button className="btn btn-secondary mr-3">
-          <Link to="/menu" style={{color: "white"}}>Tiếp tục thêm món ăn</Link>
+          <Link to="/menu-page" style={{color: "white"}}>Tiếp tục thêm món ăn</Link>
         </button>
         <button className="btn btn-primary">
-          <Link to="/payment" style={{color: "white"}}>Thanh toán</Link>
+          <Link to="/get-pay-page" style={{color: "white"}}>Thanh toán</Link>
         </button>
       </div>
     </div>
