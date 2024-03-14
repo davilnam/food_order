@@ -29,10 +29,11 @@ const reducer = (state = initialState, action) => {
         user: action.payload.title,
         isAdmin: action.payload.check
       };
-    case LOGOUT:
+    case LOGOUT:      
       return {
         ...state,
         isLoggedIn: false,
+        isAdmin: false,
         user: null,
       };
     case ADD_TO_CART:
