@@ -1,7 +1,16 @@
+import React, { useEffect } from "react";
+import { saveCurrentPath } from "../../../actions/actions";
+import { useDispatch } from "react-redux";
 import HeaderAdmin from "../Layout/HeaderAdmin";
 import { FaSearch } from "react-icons/fa";
 
 const OrderManagement = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(saveCurrentPath(window.location.pathname));
+  }, [dispatch]);
+
   return (
     <div className="content">
       <HeaderAdmin></HeaderAdmin>

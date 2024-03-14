@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../actions/actions"; // Import action addToCart
+import { addToCart, saveCurrentPath } from "../actions/actions";
 import { Link } from "react-router-dom";
 
 const PageMenu = () => {
@@ -10,7 +10,8 @@ const PageMenu = () => {
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+    dispatch(saveCurrentPath(window.location.pathname));
+  }, [dispatch]);
 
   const fetchCategories = async () => {
     try {
@@ -31,7 +32,6 @@ const PageMenu = () => {
     const foodWithDefaultQuantity = { ...food, quantity: 1 }; // Tạo một bản sao của food với quantity mặc định là 1
     dispatch(addToCart(foodWithDefaultQuantity)); // Dispatch action addToCart với thông tin sản phẩm có số lượng mặc định
   };
-  
 
   return (
     <section className="ftco-section">
@@ -78,7 +78,9 @@ const PageMenu = () => {
                         >
                           <div className="menus d-sm-flex align-items-stretch fadeInUp">
                             <div
-                              className={`menu-img img ${foodIndex % 2 !== 0 ? "order-md-last" : ""}`}
+                              className={`menu-img img ${
+                                foodIndex % 2 !== 0 ? "order-md-last" : ""
+                              }`}
                               style={{
                                 backgroundImage: `url(${require(`../assets/images/${food.image}`)})`,
                               }}
@@ -88,7 +90,9 @@ const PageMenu = () => {
                                 <div className="d-flex">
                                   <div className="one-half">
                                     <h3 className="productName">
-                                      <Link to={`/foodDetail/${food.id}`}>{food.title}</Link>
+                                      <Link to={`/foodDetail/${food.id}`}>
+                                        {food.title}
+                                      </Link>
                                     </h3>
                                   </div>
                                   <div className="one-forth">
@@ -100,7 +104,10 @@ const PageMenu = () => {
                                   <span>Gạo</span>, <span>Cà chua</span>
                                 </p>
                                 <p>
-                                  <button className="btn btn-primary addBtn" onClick={() => handleAddToCart(food)}>
+                                  <button
+                                    className="btn btn-primary addBtn"
+                                    onClick={() => handleAddToCart(food)}
+                                  >
                                     Thêm món
                                   </button>
                                 </p>

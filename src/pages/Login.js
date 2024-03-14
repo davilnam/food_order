@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate  } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../actions/actions";
+import { loginSuccess, saveCurrentPath } from "../actions/actions";
 import "../styles/css/login.css";
 
 const Login = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(saveCurrentPath(window.location.pathname));
+  }, [dispatch]);
+
   const navigate = useNavigate(); // Sửa đổi tại đây
   const [passwordVisible, setPasswordVisible] = useState(false);
 
