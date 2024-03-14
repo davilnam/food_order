@@ -28,15 +28,58 @@ const ProductManagement = () => {
   };
 
   const handleAddFood = async (food) => {
-    // Your code for adding food
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await fetch("http://localhost:4000/category", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(food),
+      });
+      // Xử lý response ở đây nếu cần
+    } catch (error) {
+      console.error("Error adding food:", error);
+      // Xử lý lỗi ở đây nếu cần
+    }
   };
 
   const handleUpdateFood = async (food) => {
-    // Your code for updating food
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await fetch(
+        `http://localhost:4000/category/${food.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(food),
+        }
+      );
+      // Xử lý response ở đây nếu cần
+    } catch (error) {
+      console.error("Error updating food:", error);
+      // Xử lý lỗi ở đây nếu cần
+    }
   };
 
-  const handleDeleteFood = async (category) => {
-    // Your code for deleting food
+  const handleDeleteFood = async (foodId) => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await fetch(`http://localhost:4000/category/${foodId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      // Xử lý response ở đây nếu cần
+    } catch (error) {
+      console.error("Error deleting food:", error);
+      // Xử lý lỗi ở đây nếu cần
+    }
   };
 
   const handleEditButtonClick = (food) => {
