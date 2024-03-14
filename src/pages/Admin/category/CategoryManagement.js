@@ -22,7 +22,7 @@ const CategoryManagement = () => {
   }, [dispatch]);
 
   const fetchCategories = () => {
-    fetch("http://localhost:4000/category")
+    fetch("http://localhost:8080/api/home/category")
       .then((response) => response.json())
       .then((data) => {
         setCategories(data.data);
@@ -32,8 +32,8 @@ const CategoryManagement = () => {
 
   const handleAddCategory = async (categoryName) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:4000/category", {
+      const token = localStorage.getItem("accessToken");
+      const response = await fetch(`http://localhost:8080/api/category/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,17 +53,14 @@ const CategoryManagement = () => {
 
   const handleUpdateCategory = async (category) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:4000/category/${category.id}`, {
+      const token = localStorage.getItem("accessToken");
+      const response = await fetch(`http://localhost:8080/api/category/update`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          name: category.name,
-          newName: category.newName,
-        }),
+        body: JSON.stringify({ name: category.name, newName: category.newName}),
       });
       if (!response.ok) {
         throw new Error("Failed to update category");
@@ -77,19 +74,15 @@ const CategoryManagement = () => {
 
   const handleDeleteCategory = async (category) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        `http://localhost:4000/category/${category.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            name: category.name,
-          }),
-        }
-      );
+      const token = localStorage.getItem("accessToken");
+      const response = await fetch(`http://localhost:8080/api/category/delete`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name: category.name}),
+      });
       if (!response.ok) {
         throw new Error("Failed to delete category");
       }

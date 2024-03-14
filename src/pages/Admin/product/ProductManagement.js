@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { saveCurrentPath } from "../../../actions/actions";
 
 const ProductManagement = () => {
+  const staticUrl = "http://localhost:8080/api/home/file";
   const [categories, setCategories] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -24,7 +25,7 @@ const ProductManagement = () => {
   }, [dispatch]);
 
   const fetchFoods = () => {
-    fetch("http://localhost:4000/category")
+    fetch("http://localhost:8080/api/home/category")
       .then((response) => response.json())
       .then((data) => {
         setCategories(data.data);
@@ -35,7 +36,7 @@ const ProductManagement = () => {
   const handleAddFood = async (food) => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await fetch("http://localhost:4000/category", {
+      const response = await fetch("http://localhost:8080/api/food/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,8 +75,8 @@ const ProductManagement = () => {
   const handleDeleteFood = async (foodId) => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await fetch(`http://localhost:4000/category/${foodId}`, {
-        method: "DELETE",
+      const response = await fetch(`http://localhost:8080/api/food/delete/${foodId}`, {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -200,7 +201,7 @@ const ProductManagement = () => {
                   <td>{food.id}</td>
                   <td>
                     <img
-                      src={require(`../../../assets/images/${food.image}`)}
+                      src={`${staticUrl}/food/${food.image}`}
                       alt={food.title}
                       style={{
                         width: "100px",
