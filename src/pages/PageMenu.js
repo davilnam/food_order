@@ -2,15 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../actions/actions"; // Import action addToCart
 import { Link } from "react-router-dom";
+import { scrollToElement } from '../scrollUtils';
 
 const PageMenu = () => {
-  var staticUrl = "http://localhost:8080/api/home/file";
+  const staticUrl = "http://localhost:8080/api/home/file";
   const dispatch = useDispatch();
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(0); // Đặt selectedCategory mặc định là 0
 
   useEffect(() => {
     fetchCategories();
+    setTimeout(() => {
+      scrollToElement('scrollTarget');
+    }, 1000); // Cuộn xuống sau 2 giây
   }, []);
 
   const fetchCategories = async () => {
@@ -33,9 +37,8 @@ const PageMenu = () => {
     dispatch(addToCart(foodWithDefaultQuantity)); // Dispatch action addToCart với thông tin sản phẩm có số lượng mặc định
   };
   
-
   return (
-    <section className="ftco-section">
+    <section id="scrollTarget" className="ftco-section">
       <div className="container">
         <div className="ftco-search">
           <div className="row">

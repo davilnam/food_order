@@ -87,7 +87,7 @@ const FoodDetail = () => {
                   className="menu-img img"
                   style={{
                     height: "100%",
-                    backgroundImage: `url(${staticUrl}/food/${food.image})`,
+                    backgroundImage: `url(${staticUrl}/food/${foodDetail.image})`,
                   }}
                 ></div>
               </div>

@@ -39,7 +39,7 @@ const Login = () => {
 
       const data = await response.json();
       let check = false;
-      if (data.desc === "[ADMIN]") {
+      if (data.desc === "[SUPERADMIN]") {
         check = true;
       }       
       // Cập nhật reducer và localStorage
@@ -47,7 +47,7 @@ const Login = () => {
       localStorage.setItem("accessToken", data.data); // Lưu accessToken vào localStorage
 
       // Điều hướng người dùng đến trang phù hợp dựa vào desc
-      if (data.desc === "[ADMIN]") {
+      if (data.desc === "[SUPERADMIN]") {
         navigate("/admin");
       } else {
         navigate("/");
