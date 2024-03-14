@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { saveCurrentPath } from "../actions/actions";
 
 const GoogleMapsEmbed = () => {
   return (
@@ -17,6 +19,11 @@ const GoogleMapsEmbed = () => {
 };
 
 const PageContact = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(saveCurrentPath(window.location.pathname));
+  }, [dispatch]);
   return (
     <div>
       <section className="ftco-section ftco-no-pt ftco-no-pb contact-section">

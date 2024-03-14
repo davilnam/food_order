@@ -16,6 +16,7 @@ import PageContact from "./pages/PageContact";
 import PageMenu from "./pages/PageMenu";
 import FoodDetail from "./components/detail_food/FoodDetail";
 import Cart from "./components/cart/Cart";
+import ThankYouPage from "./pages/ThankYouPage";
 import Payment from "./components/payment/Payment";
 import NotFound from "./components/NotFound";
 import LayoutUser from "./pages/LayoutUser";
@@ -39,6 +40,7 @@ const App = () => {
         {/* Sử dụng Route param để truyền id vào FoodDetail */}
         <Route path="food-detail/:id" element={<FoodDetail />}></Route>
         <Route path="login-page" element={<Login />}></Route>
+        <Route path="thankYou" element={<ThankYouPage />}></Route>
         <Route path="register-page" element={<Register />}></Route>
         {/* Thêm một Route cuối cùng với path="*" để xử lý các trang không hợp lệ */}
         <Route path="*" element={<Navigate to="/not-found" />} />

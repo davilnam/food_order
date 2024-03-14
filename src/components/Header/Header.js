@@ -1,22 +1,29 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaBars, FaShoppingCart } from "react-icons/fa";
 import { faPhoneAlt, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../actions/actions";
 import "../../styles/css/header.css";
 
 const Header = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const cartItems = useSelector((state) => state.app.cartItems); // Lấy số lượng sản phẩm trong giỏ hàng từ Redux store
-  const { user, isLoggedIn } = useSelector((state) => state.app);
+  let { user, isLoggedIn } = useSelector((state) => state.app);
+  // isLoggedIn = true;
+  // user = "Bàn 1"
   const toggleMobileMenu = () => {
     setShowMobileMenu(!showMobileMenu);
   };
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleLogout = () => {
-    // goi api dang xuat    
-  }
+    dispatch(logout());
+    navigate("/"); 
+  };
 
   return (
     <>
@@ -172,7 +179,7 @@ const Header = () => {
                   <NavLink to="/login-page" className="nav-link">
                     Đăng nhập
                   </NavLink>
-                </li>                
+                </li>
                 <li className="nav-item">
                   <NavLink to="/cart-detail-page" className="nav-link">
                     <div
@@ -193,7 +200,7 @@ const Header = () => {
                   </NavLink>
                 </li>
               </ul>
-            )}            
+            )}
           </div>
         </div>
       </nav>

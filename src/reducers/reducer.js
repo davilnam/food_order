@@ -12,6 +12,7 @@ const initialState = {
   isLoggedIn: false,
   isAdmin: false,
   user: null,
+  currentPath: "/",
   cartItems: [],
 };
 
@@ -22,17 +23,18 @@ const reducer = (state = initialState, action) => {
         ...state,
         isSidebarOpen: !state.isSidebarOpen,
       };
-    case LOGIN_SUCCESS:      
+    case LOGIN_SUCCESS:
       return {
         ...state,
         isLoggedIn: true,
         user: action.payload.title,
-        isAdmin: action.payload.check
+        isAdmin: action.payload.check,
       };
     case LOGOUT:
       return {
         ...state,
         isLoggedIn: false,
+        isAdmin: false,
         user: null,
       };
     case ADD_TO_CART:
@@ -54,12 +56,11 @@ const reducer = (state = initialState, action) => {
         };
       } else {
         // Nếu món hàng chưa tồn tại, thêm vào giỏ hàng
-        console.log(state.cartItems);              
+        console.log(state.cartItems);
         return {
           ...state,
           cartItems: [...state.cartItems, action.payload],
         };
-                    
       }
     case REMOVE_FROM_CART:
       const updatedCartItems = state.cartItems.filter(
@@ -68,6 +69,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         cartItems: updatedCartItems,
+      };
+    case "SAVE_CURRENT_PATH":
+      return {
+        ...state,
+        currentPath: action.payload,
       };
     default:
       return state;

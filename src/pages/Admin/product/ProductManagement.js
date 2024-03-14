@@ -4,6 +4,8 @@ import ModalEditProduct from "./ModalEditProduct";
 import ModalDeleteProduct from "./ModalDeleteProduct";
 import HeaderAdmin from "../Layout/HeaderAdmin";
 import { FaTrash, FaPencilAlt, FaSearch } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { saveCurrentPath } from "../../../actions/actions";
 
 const ProductManagement = () => {
   const [categories, setCategories] = useState([]);
@@ -14,9 +16,12 @@ const ProductManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [foodsPerPage] = useState(10);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     fetchFoods();
-  }, []);
+    dispatch(saveCurrentPath(window.location.pathname));
+  }, [dispatch]);
 
   const fetchFoods = () => {
     fetch("http://localhost:4000/category")

@@ -22,3 +22,8 @@ export const removeFromCart  = (product) => ({
   type: REMOVE_FROM_CART,
   payload: product
 });
+
+export const saveCurrentPath = (path) => ({
+  type: 'SAVE_CURRENT_PATH',
+  payload: path
+});
