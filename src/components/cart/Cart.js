@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart } from "../../actions/actions";
+import { removeFromCart, saveCurrentPath } from "../../actions/actions";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
@@ -21,7 +21,8 @@ const Cart = () => {
       return quantities;
     }, {});
     setItemQuantities(updatedItemQuantities);
-  }, [cartItems]);
+    dispatch(saveCurrentPath(window.location.pathname));
+  }, [cartItems, dispatch]);
 
   const totalQuantity = Object.values(itemQuantities).reduce(
     (total, quantity) => total + quantity,
