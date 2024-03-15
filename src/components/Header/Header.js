@@ -12,7 +12,7 @@ const Header = () => {
   const cartItems = useSelector((state) => state.app.cartItems); // Lấy số lượng sản phẩm trong giỏ hàng từ Redux store
   let { user, isLoggedIn } = useSelector((state) => state.app);
   // isLoggedIn = true;
-  // user = "Bàn 1"
+  // user = {title:"Bàn 1", userId: 1}
   const toggleMobileMenu = () => {
     setShowMobileMenu(!showMobileMenu);
   };

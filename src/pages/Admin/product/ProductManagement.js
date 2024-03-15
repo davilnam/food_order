@@ -34,6 +34,13 @@ const ProductManagement = () => {
   };
 
   const handleAddFood = async (food) => {
+    console.log(food);
+    const formData = new FormData();
+    formData.append("title", food.title);
+    formData.append("timeShip", "About 30 minutes");
+    formData.append("price", food.price);
+    formData.append("file", food.image); // Thêm đối tượng File vào FormData
+    formData.append("category_name", food.category);
     try {
       const accessToken = localStorage.getItem("accessToken");
       const response = await fetch("http://localhost:8080/api/food/add", {
@@ -42,7 +49,7 @@ const ProductManagement = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify(food),
+        body: formData,
       });
       // Xử lý response ở đây nếu cần
     } catch (error) {
@@ -52,6 +59,20 @@ const ProductManagement = () => {
   };
 
   const handleUpdateFood = async (food) => {
+    let file;
+    const formData = new FormData();
+    formData.append('title', food.title);
+    formData.append('timeShip', "About 30 minutes");
+    formData.append('price', food.price);
+    formData.append('category_name', food.category);
+    formData.append('id', food.id);
+
+    if (food.image instanceof File) {      
+      formData.append('file', food.image); // Thêm đối tượng File vào FormData
+    }else{
+      file = new File([""], food.image, { type: "image/jpeg" });
+      formData.append('file', file); // Thêm đối tượng File vào FormData
+    }        
     try {
       const accessToken = localStorage.getItem("accessToken");
       const response = await fetch(
@@ -62,7 +83,7 @@ const ProductManagement = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
           },
-          body: JSON.stringify(food),
+          body: formData
         }
       );
       // Xử lý response ở đây nếu cần
