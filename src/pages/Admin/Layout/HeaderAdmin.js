@@ -15,7 +15,7 @@ const HeaderAdmin = () => {
     }
 
     const handleLogout = () => {
-        dispatch(logout())
+        dispatch(logout())        
         navigate('/'); // Điều hướng người dùng đến trang chính sau khi logout
     }
 
@@ -32,7 +32,7 @@ const HeaderAdmin = () => {
                     <a href="/profile" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                         <img className="rounded-circle me-lg-2" src={default_avatar} alt=""
                             style={{ width: "40px", height: "40px" }} />
-                        <span className="d-none d-lg-inline-flex">{user}</span>
+                        <span className="d-none d-lg-inline-flex">{user.title}</span>
                     </a>
                     <div className="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                         <button className="dropdown-item">My Profile</button>
