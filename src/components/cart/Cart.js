@@ -142,7 +142,7 @@ const Cart = () => {
               <tr key={item.id}>
                 <td>
                   <img
-                    src={require(`../../assets/images/${item.image}`)}
+                    src={`${staticUrl}/food/${item.image}`}
                     alt={item.name}
                     className="img-fluid"
                     style={{ maxWidth: "100px" }}
@@ -182,7 +182,7 @@ const Cart = () => {
 
       <div className="text-right pb-5">
         <button className="btn btn-secondary mr-3">
-          <Link to="/menu" style={{color: "white"}}>Tiếp tục thêm món ăn</Link>
+          <Link to="/menu-page" style={{color: "white"}}>Tiếp tục thêm món ăn</Link>
         </button>
         <button
           className="btn btn-primary mr-3"
