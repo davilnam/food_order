@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { saveCurrentPath } from "../../actions/actions";
+import { saveCurrentPath, clearOrderItems } from "../../actions/actions";
 import { useNavigate } from "react-router-dom";
 
 const Payment = () => {
-  const cartItems = useSelector((state) => state.app.cartItems);
+  const cartItemsOrder = useSelector((state) => state.app.cartItemsOrder);
   const [customerInfo, setCustomerInfo] = useState({
     fullName: "",
     tableName: "",
@@ -13,7 +13,7 @@ const Payment = () => {
   });
   const [paymentMethod, setPaymentMethod] = useState("");
 
-  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const totalPrice = cartItemsOrder.reduce((total, item) => total + item.price * item.quantity, 0);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,13 +31,15 @@ const Payment = () => {
 
   const navigate = useNavigate();
 
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     // Xử lý logic khi người dùng ấn nút Đặt hàng
     console.log("Thông tin khách hàng:", customerInfo);
     console.log("Phương thức thanh toán:", paymentMethod);
-    console.log("Giỏ hàng:", cartItems);
+    console.log("Giỏ hàng:", cartItemsOrder);
     // gọi api thanh toán thành công thì chuyên qua trang cảm ơn và xóa hết sản phẩm trong giỏ hàng
+    dispatch(clearOrderItems());
     navigate("/thankYou");
   };
 
@@ -57,10 +59,10 @@ const Payment = () => {
             <div className="col-md-4 order-md-2 mb-4">
               <h4 className="d-flex justify-content-between align-items-center mb-3">
                 <span className="text-muted">Giỏ hàng</span>
-                <span className="badge badge-secondary badge-pill">{cartItems.length}</span>
+                <span className="badge badge-secondary badge-pill">{cartItemsOrder.length}</span>
               </h4>
               <ul className="list-group mb-3">
-                {cartItems.map((item) => (
+                {cartItemsOrder.map((item) => (
                   <li key={item.id} className="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
                       <h6 className="my-0">{item.title}</h6>

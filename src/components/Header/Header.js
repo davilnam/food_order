@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaBars, FaShoppingCart } from "react-icons/fa";
 import { faPhoneAlt, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../actions/actions";
+import { logout, clearCartItems, clearOrderItems } from "../../actions/actions";
 import "../../styles/css/header.css";
 
 const Header = () => {
@@ -22,6 +22,8 @@ const Header = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(clearCartItems());
+    dispatch(clearOrderItems());
     navigate("/"); 
   };
 

@@ -32,7 +32,7 @@ const CategoryManagement = () => {
 
   const handleAddCategory = async (categoryName) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("accessToken");
       const response = await fetch("http://localhost:4000/category", {
         method: "POST",
         headers: {

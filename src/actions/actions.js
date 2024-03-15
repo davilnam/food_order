@@ -1,31 +1,41 @@
-import { TOGGLE_SIDEBAR, LOGIN_SUCCESS, LOGOUT, ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART_ITEM_QUANTITY } from "./actionTypes";
+import {
+  TOGGLE_SIDEBAR,
+  LOGIN_SUCCESS,
+  LOGOUT,
+  ADD_TO_CART,
+  REMOVE_FROM_CART,
+  UPDATE_CART_ITEM_QUANTITY,
+  CLEAR_CART_ITEMS,
+  ORDER_ITEMS,
+  CLEAR_ORDER_ITEMS
+} from "./actionTypes";
 
 export const toggleSidebar = () => ({
-  type: TOGGLE_SIDEBAR
+  type: TOGGLE_SIDEBAR,
 });
 
 export const loginSuccess = (userData) => ({
   type: LOGIN_SUCCESS,
-  payload: userData
+  payload: userData,
 });
 
 export const logout = () => ({
-  type: LOGOUT
+  type: LOGOUT,
 });
 
-export const addToCart = (product) => ({  
+export const addToCart = (product) => ({
   type: ADD_TO_CART,
-  payload: product
+  payload: product,
 });
 
-export const removeFromCart  = (product) => ({
+export const removeFromCart = (product) => ({
   type: REMOVE_FROM_CART,
-  payload: product
+  payload: product,
 });
 
 export const saveCurrentPath = (path) => ({
-  type: 'SAVE_CURRENT_PATH',
-  payload: path
+  type: "SAVE_CURRENT_PATH",
+  payload: path,
 });
 
 export const updateCartItemQuantity = (itemId, quantity) => ({
@@ -34,4 +44,17 @@ export const updateCartItemQuantity = (itemId, quantity) => ({
     itemId,
     quantity,
   },
+});
+
+export const clearCartItems = () => ({
+  type: CLEAR_CART_ITEMS,
+});
+
+
+export const orderItems = () => ({
+  type: ORDER_ITEMS
+});
+
+export const clearOrderItems = () => ({
+  type: CLEAR_ORDER_ITEMS
 });

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate  } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { loginSuccess, saveCurrentPath } from "../actions/actions";
+import { loginSuccess, saveCurrentPath, clearCartItems, clearOrderItems } from "../actions/actions";
 import "../styles/css/login.css";
 
 const Login = () => {
@@ -50,6 +50,8 @@ const Login = () => {
       // Cập nhật reducer và localStorage
       const user = {title: data.title, userId: data.id};
       dispatch(loginSuccess({user: user, check: check})); // Cập nhật thông tin người dùng
+      dispatch(clearCartItems());
+      dispatch(clearOrderItems());
       localStorage.setItem("accessToken", data.data); // Lưu accessToken vào localStorage
 
       // Điều hướng người dùng đến trang phù hợp dựa vào desc
