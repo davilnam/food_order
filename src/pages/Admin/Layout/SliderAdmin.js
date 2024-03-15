@@ -8,7 +8,7 @@ import { BiSolidCategory } from "react-icons/bi";
 import { NavLink } from "react-router-dom";
 
 const SliderAdmin = () => {
-  let user = useSelector((state) => state.app.user);  
+  let user = useSelector((state) => state.app.user);    
   const isSidebarOpen = useSelector((state) => state.app.isSidebarOpen);
   const sliderClass = isSidebarOpen
     ? "sidebarAdmin pe-4 pb-3"

@@ -15,6 +15,7 @@ const initialState = {
   isSidebarOpen: false,
   isLoggedIn: false,
   isAdmin: false,
+  isCounter: false,
   user: null,
   currentPath: "/",
   cartItems: [],
@@ -33,17 +34,18 @@ const reducer = (state = initialState, action) => {
         ...state,
         isLoggedIn: true,
         user: action.payload.user,
-        isAdmin: action.payload.check,
+        isAdmin: action.payload.isAdmin,
+        isCounter: action.payload.isCounter
       };
     case LOGOUT:
       return {
         ...state,
         isLoggedIn: false,
         isAdmin: false,
+        isCounter: false,
         user: null,
       };
-    case ADD_TO_CART:      
-      console.log(action.payload)
+    case ADD_TO_CART:            
       // Kiểm tra xem món hàng đã tồn tại trong giỏ hàng chưa
       const existingItemIndex = state.cartItems.findIndex(
         (item) => item.id === action.payload.id

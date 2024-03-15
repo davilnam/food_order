@@ -43,21 +43,26 @@ const Login = () => {
       }
 
       const data = await response.json();
-      let check = false;
-      if (data.desc === "[ADMIN]") {
-        check = true;
-      }       
+      let isAdmin = false;
+      let isCounter = false;
+      if (data.desc === "[SUPERADMIN]") {
+        isAdmin = true;
+      } else if(data.desc === "[ADMIN]"){
+        isCounter = true;
+      }
       // Cập nhật reducer và localStorage
       const user = {title: data.title, userId: data.id};
-      dispatch(loginSuccess({user: user, check: check})); // Cập nhật thông tin người dùng
+      dispatch(loginSuccess({user: user, isAdmin: isAdmin, isCounter: isCounter})); // Cập nhật thông tin người dùng
       dispatch(clearCartItems());
       dispatch(clearOrderItems());
       localStorage.setItem("accessToken", data.data); // Lưu accessToken vào localStorage
 
       // Điều hướng người dùng đến trang phù hợp dựa vào desc
-      if (data.desc === "[ADMIN]") {
+      if (data.desc === "[SUPERADMIN]") {
         navigate("/admin/dashboard");
-      } else {
+      } else  if (data.desc === "[ADMIN]"){
+        navigate("/counter");
+      }else{        
         navigate("/");
       }
     } catch (error) {

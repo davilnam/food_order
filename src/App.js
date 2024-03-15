@@ -18,14 +18,15 @@ import FoodDetail from "./components/detail_food/FoodDetail";
 import Cart from "./components/cart/Cart";
 import ThankYouPage from "./pages/ThankYouPage";
 import Payment from "./components/payment/Payment";
+import Counter from "./pages/Counter/Counter";
 import NotFound from "./components/NotFound";
 import LayoutUser from "./pages/LayoutUser";
 
 const App = () => {
   // Lấy giá trị isLoggedIn và isAdmin từ reducer
-  let { isLoggedIn, isAdmin } = useSelector(state => state.app);
-  // isAdmin = true;
-  // isLoggedIn = true;
+  let { isLoggedIn, isAdmin, isCounter } = useSelector((state) => state.app);
+  isCounter = true;
+  isLoggedIn = true;
 
   return (
     <Routes>
@@ -55,6 +56,10 @@ const App = () => {
           {/* Thêm một Route cuối cùng với path="*" để xử lý các trang không hợp lệ */}
           <Route path="*" element={<Navigate to="/not-found" />} />
         </Route>
+      )}
+      {isLoggedIn && isCounter && (
+      <Route path="/counter" element={<Counter/>}>        
+      </Route>
       )}
       {/* Trang not found */}
       <Route path="not-found" element={<NotFound />} />
