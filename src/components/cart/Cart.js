@@ -12,7 +12,10 @@ const Cart = () => {
   const staticUrl = "http://localhost:8080/api/home/file";
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.app.cartItems);
+  const user = useSelector((state) => state.app.user);
   const cartItemsOrder = useSelector((state) => state.app.cartItemsOrder);
+  console.log(cartItems);
+  console.log(cartItemsOrder);
 
   const [itemQuantitiesCart, setItemQuantitiesCart] = useState({});
   const [itemQuantitiesOrder, setItemQuantitiesOrder] = useState({});
@@ -75,7 +78,33 @@ const Cart = () => {
     dispatch(removeFromCart(id));
   };
 
+  const fetchOrders = async (cartItems) => {
+    const reducedArray = cartItems.map(item => {
+      return {
+        foodID: item.id,
+        number: item.quantity
+      };
+    });
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await fetch("http://localhost:4000/api/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ userId: user.userId, orderItemDTOList: reducedArray })
+      });
+      if (!response.ok) {
+        throw new Error("Failed to add category");
+      }      
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
+
   const handleOrder = () => {
+    fetchOrders(cartItems);
     dispatch(orderItems());
   };
 

@@ -78,6 +78,7 @@ const ProductManagement = () => {
       formData.append('file', food.image); // Thêm đối tượng File vào FormData
     }else{
       file = new File([""], food.image, { type: "image/jpeg" });
+      console.log(file);
       formData.append('file', file); // Thêm đối tượng File vào FormData
     }        
     try {
