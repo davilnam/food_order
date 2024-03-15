@@ -37,22 +37,25 @@ const ProductManagement = () => {
     console.log(food);
     const formData = new FormData();
     formData.append("title", food.title);
-    formData.append("timeShip", "About 30 minutes");
+    formData.append("timeServe", 10);
+    formData.append("material", "About 30 minutes");
+    formData.append("detail", "About 30 minutes");
     formData.append("price", food.price);
     formData.append("file", food.image); // Thêm đối tượng File vào FormData
     formData.append("category_name", food.category);
+    
     try {
-      const accessToken = localStorage.getItem("accessToken");
-      const response = await fetch("http://localhost:8080/api/food/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: formData,
-      });
-      // Xử lý response ở đây nếu cần
-    } catch (error) {
+        const accessToken = localStorage.getItem("accessToken");
+        const response = await fetch("http://localhost:8080/api/food/add", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+            body: formData,
+        });
+        // Xử lý response ở đây nếu cần
+        fetchFoods()
+    }catch (error) {
       console.error("Error adding food:", error);
       // Xử lý lỗi ở đây nếu cần
     }
@@ -61,11 +64,15 @@ const ProductManagement = () => {
   const handleUpdateFood = async (food) => {
     let file;
     const formData = new FormData();
-    formData.append('title', food.title);
-    formData.append('timeShip', "About 30 minutes");
-    formData.append('price', food.price);
-    formData.append('category_name', food.category);
     formData.append('id', food.id);
+    formData.append('title', food.title);
+    formData.append('price', food.price);
+    formData.append('material', "About 30 minutes");
+    formData.append('detail', "");
+    formData.append('timeServe', 10);
+    
+    formData.append('category_name', food.category);
+    
 
     if (food.image instanceof File) {      
       formData.append('file', food.image); // Thêm đối tượng File vào FormData
@@ -76,17 +83,17 @@ const ProductManagement = () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
       const response = await fetch(
-        `http://localhost:4000/category/${food.id}`,
+        `http://localhost:8080/api/food/update`,
         {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
           },
           body: formData
         }
       );
       // Xử lý response ở đây nếu cần
+      fetchFoods()
     } catch (error) {
       console.error("Error updating food:", error);
       // Xử lý lỗi ở đây nếu cần
@@ -98,12 +105,13 @@ const ProductManagement = () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
       const response = await fetch(`http://localhost:8080/api/food/delete/${foodId}`, {
-        method: "POST",
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
       // Xử lý response ở đây nếu cần
+      fetchFoods()
     } catch (error) {
       console.error("Error deleting food:", error);
       // Xử lý lỗi ở đây nếu cần
