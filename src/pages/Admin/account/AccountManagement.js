@@ -72,11 +72,11 @@ const AccountManagement = () => {
           <table className="table">
             <thead>
               <tr>
-                <th>#</th>
+                <th>STT</th>
                 <th>Email</th>
                 <th>Name</th>
                 <th>Role</th>
-                <th>Phone</th>
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
