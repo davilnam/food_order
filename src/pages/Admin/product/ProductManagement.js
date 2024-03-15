@@ -73,6 +73,7 @@ const ProductManagement = () => {
   };
 
   const handleDeleteFood = async (foodId) => {
+    console.log(foodId)
     try {
       const accessToken = localStorage.getItem("accessToken");
       const response = await fetch(`http://localhost:8080/api/food/delete/${foodId}`, {

@@ -102,6 +102,9 @@ const Cart = () => {
         <button className="btn btn-secondary mr-3">
           <Link to="/menu-page" style={{color: "white"}}>Tiếp tục thêm món ăn</Link>
         </button>
+        <button className="btn btn-primary mr-3">
+          <Link to="/menu-page" style={{color: "white"}}>Order</Link>
+        </button>
         <button className="btn btn-primary">
           <Link to="/get-pay-page" style={{color: "white"}}>Thanh toán</Link>
         </button>
