@@ -146,7 +146,7 @@ const Header = () => {
             {isLoggedIn ? (
               <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
-                  <span className="nav-link">{user}</span>
+                  <span className="nav-link">{user.title}</span>
                 </li>
                 <li className="nav-item">
                   <button className="nav-link" onClick={handleLogout}>

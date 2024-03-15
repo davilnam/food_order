@@ -48,7 +48,8 @@ const Login = () => {
         check = true;
       }       
       // Cập nhật reducer và localStorage
-      dispatch(loginSuccess({title: data.title, check: check})); // Cập nhật thông tin người dùng
+      const user = {title: data.title, userId: data.id};
+      dispatch(loginSuccess({user: user, check: check})); // Cập nhật thông tin người dùng
       localStorage.setItem("accessToken", data.data); // Lưu accessToken vào localStorage
 
       // Điều hướng người dùng đến trang phù hợp dựa vào desc

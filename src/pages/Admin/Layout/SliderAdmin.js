@@ -8,8 +8,7 @@ import { BiSolidCategory } from "react-icons/bi";
 import { NavLink } from "react-router-dom";
 
 const SliderAdmin = () => {
-  let user = useSelector((state) => state.app.user);
-  console.log(user)
+  let user = useSelector((state) => state.app.user);  
   const isSidebarOpen = useSelector((state) => state.app.isSidebarOpen);
   const sliderClass = isSidebarOpen
     ? "sidebarAdmin pe-4 pb-3"
@@ -29,8 +28,8 @@ const SliderAdmin = () => {
             <div className="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
           </div>
           <div className="ms-3">
-            <h6 className="mb-0">Nam</h6>
-            <span>Admin</span>
+            <h6 className="mb-0">{user.title}</h6>
+            {/* <span>Admin</span> */}
           </div>
         </div>
         <div className="navbar-nav w-100" id="sidebar">

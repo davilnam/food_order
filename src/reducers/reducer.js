@@ -5,7 +5,7 @@ import {
   LOGOUT,
   ADD_TO_CART,
   REMOVE_FROM_CART,
-  UPDATE_CART_ITEM_QUANTITY
+  UPDATE_CART_ITEM_QUANTITY,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -28,7 +28,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoggedIn: true,
-        user: action.payload.title,
+        user: action.payload.user,
         isAdmin: action.payload.check,
       };
     case LOGOUT:
@@ -76,14 +76,14 @@ const reducer = (state = initialState, action) => {
         ...state,
         currentPath: action.payload,
       };
-      case UPDATE_CART_ITEM_QUANTITY:
+    case UPDATE_CART_ITEM_QUANTITY:
       return {
         ...state,
-        cartItems: state.cartItems.map(item =>
+        cartItems: state.cartItems.map((item) =>
           item.id === action.payload.itemId
             ? { ...item, quantity: action.payload.quantity }
             : item
-        )
+        ),
       };
     default:
       return state;
