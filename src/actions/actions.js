@@ -1,4 +1,4 @@
-import { TOGGLE_SIDEBAR, LOGIN_SUCCESS, LOGOUT, ADD_TO_CART, REMOVE_FROM_CART } from "./actionTypes";
+import { TOGGLE_SIDEBAR, LOGIN_SUCCESS, LOGOUT, ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART_ITEM_QUANTITY } from "./actionTypes";
 
 export const toggleSidebar = () => ({
   type: TOGGLE_SIDEBAR
@@ -26,4 +26,12 @@ export const removeFromCart  = (product) => ({
 export const saveCurrentPath = (path) => ({
   type: 'SAVE_CURRENT_PATH',
   payload: path
+});
+
+export const updateCartItemQuantity = (itemId, quantity) => ({
+  type: UPDATE_CART_ITEM_QUANTITY,
+  payload: {
+    itemId,
+    quantity,
+  },
 });
