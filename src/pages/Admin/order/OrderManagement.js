@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { saveCurrentPath } from "../../../actions/actions";
 import HeaderAdmin from "../Layout/HeaderAdmin";
 import { FaSearch } from "react-icons/fa";
-
+import { Link } from "react-router-dom";
 const OrderManagement = () => {
   const dispatch = useDispatch();
   const [orders, setOrders] = useState([]);
@@ -95,7 +95,12 @@ const OrderManagement = () => {
                   <td>{order.totalPrice}</td>
                   <td>{order.status ? "Đã phục vụ" : "Chưa phục vụ"}</td>
                   <td>{order.is_pay ? "Đã thanh toán" : "Chưa thanh toán"}</td>
-                  <td><button className="btn btn-secondary">Chi tiết</button></td> {/* Bổ sung liên kết đến trang chi tiết đơn hàng */}
+                  <td><Link
+                      to={`/admin/get-detail/${order.id}`}
+                      className="btn btn-secondary"
+                    >
+                      Chi tiết
+                    </Link></td> {/* Bổ sung liên kết đến trang chi tiết đơn hàng */}
                 </tr>
               ))}
             </tbody>
