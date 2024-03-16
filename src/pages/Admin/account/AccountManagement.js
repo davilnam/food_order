@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import HeaderAdmin from "../Layout/HeaderAdmin";
 import { FaSearch, FaPencilAlt, FaTrash } from "react-icons/fa";
 import ModalAddAccount from "./ModalAddAccount";
+import ModalDeleteAccount from "./ModalDeleteAccount";
 import { saveCurrentPath } from "../../../actions/actions";
 import { useDispatch } from "react-redux";
 
 const AccountManagement = () => {
   const [accounts, setAccounts] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [accountId, setAccountId] = useState("");
 
   const dispatch = useDispatch();
 
@@ -41,6 +44,56 @@ const AccountManagement = () => {
 
   const handleAddButtonClick = () => {
     setShowAddModal(true);
+  };
+
+  const handleApproveAccount = async (accountId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/account/approve/${accountId}`,
+        {
+          method: "PUT", // Phương thức PUT để cập nhật trạng thái phê duyệt
+        }
+      );
+      const data = await response.json();
+      if (data.success) {
+        // Nếu phê duyệt thành công, cập nhật lại danh sách tài khoản
+        fetchAccounts();
+      } else {
+        console.error("Error approving account:", data.desc);
+      }
+    } catch (error) {
+      console.error("Error approving account:", error);
+    }
+  };
+
+  const handleDeleteAccount = async (accountId) => {
+    console.log(accountId);
+    try {      
+      const response = await fetch(
+        `http://localhost:4000/account/${accountId}`,
+        {
+          method: "DELETE", // Phương thức DELETE để xóa tài khoản
+        }
+      );
+      const data = await response.json();
+      if (data.success) {
+        // Nếu xóa thành công, cập nhật lại danh sách tài khoản
+        fetchAccounts();
+      } else {
+        console.error("Error deleting account:", data.desc);
+      }
+    } catch (error) {
+      console.error("Error deleting account:", error);
+    }
+  };
+
+  const toggleDeleteModal = () => {
+    setShowDeleteModal(!showDeleteModal);
+  };
+
+  const handleDeleteButtonClick = (id) => {
+    setAccountId(id);
+    setShowDeleteModal(true);
   };
 
   return (
@@ -106,13 +159,19 @@ const AccountManagement = () => {
                   <td>{account.role}</td>
                   <td>{account.phone}</td>
                   <td>
-                    <button className="btn btn-danger  mr-2">
+                    <button
+                      className="btn btn-danger mr-2"
+                      onClick={() => handleDeleteButtonClick(account.id)}
+                    >
                       <FaTrash />
                     </button>
                     {account.status ? (
                       ""
                     ) : (
-                      <button className="btn btn-primary">
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleApproveAccount(account.id)}
+                      >
                         Phê duyệt
                       </button>
                     )}
@@ -123,6 +182,14 @@ const AccountManagement = () => {
           </table>
         </div>
       </div>
+      {showDeleteModal && (
+        <ModalDeleteAccount
+          isOpen={showDeleteModal}
+          toggle={toggleDeleteModal}
+          accountId={accountId}
+          handleDelete={handleDeleteAccount}
+        />
+      )}
     </div>
   );
 };
