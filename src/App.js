@@ -19,14 +19,14 @@ import Cart from "./components/cart/Cart";
 import ThankYouPage from "./pages/ThankYouPage";
 import Payment from "./components/payment/Payment";
 import OrderDetail from "./pages/Admin/order/OrderDetail";
-import Counter from "./pages/Counter/Counter";
+import CounterPage from "./pages/Counter/Counter"
 import NotFound from "./components/NotFound";
 import LayoutUser from "./pages/LayoutUser";
 
 const App = () => {
   // Lấy giá trị isLoggedIn và isAdmin từ reducer
   let { isLoggedIn, isAdmin, isCounter } = useSelector((state) => state.app);
-  isAdmin = true;
+  isCounter = true;
   isLoggedIn = true;
 
   return (
@@ -60,7 +60,7 @@ const App = () => {
         </Route>
       )}
       {isLoggedIn && isCounter && (
-      <Route path="/counter" element={<Counter/>}>        
+      <Route path="/counter" element={<CounterPage/>}>        
       </Route>
       )}
       {/* Trang not found */}

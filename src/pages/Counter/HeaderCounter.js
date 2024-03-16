@@ -15,7 +15,7 @@ const HeaderCounter = () => {
   return (
     <Navbar color="dark" dark expand="md">
       <div className="container d-flex justify-content-between">
-        <NavbarBrand href="/">Order Management</NavbarBrand>
+        <NavbarBrand href="/counter">Order Management</NavbarBrand>
         {user && (
           <Nav navbar>
             <NavItem>
