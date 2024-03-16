@@ -4,12 +4,16 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { loginSuccess, saveCurrentPath, clearCartItems, clearOrderItems } from "../actions/actions";
 import "../styles/css/login.css";
-
+import { scrollToElement } from '../scrollUtils';
 const Login = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
+    dispatch(saveCurrentPath(window.location.pathname));
+    setTimeout(() => {
+      scrollToElement('scrollTarget');
+    });
   }, [dispatch]);
 
   const navigate = useNavigate(); // Sửa đổi tại đây

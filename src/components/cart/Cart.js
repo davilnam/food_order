@@ -87,7 +87,7 @@ const Cart = () => {
     });
     try {
       const token = localStorage.getItem("accessToken");
-      const response = await fetch("http://localhost:4000/api/order", {
+      const response = await fetch("http://localhost:8080/api/order/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -97,7 +97,7 @@ const Cart = () => {
       });
       if (!response.ok) {
         throw new Error("Failed to add category");
-      }      
+      }
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
@@ -144,8 +144,8 @@ const Cart = () => {
               </tbody>
             </table>
             <div className="d-flex justify-content-between">
-              <p>Tổng số sản phẩm: {totalQuantityOrder}</p>
-              <p>Tổng tiền: ${totalPriceOrder}</p>
+              <p>Số món đã đặt: {totalQuantityOrder}</p>
+              <p>Giá trị hóa đơn: ${totalPriceOrder}</p>
             </div>
           </div>
         ) : (
@@ -210,19 +210,32 @@ const Cart = () => {
       </div>
 
       <div className="text-right pb-5">
+        {/* Nút tiếp tục thêm món ăn */}
         <button className="btn btn-secondary mr-3">
-          <Link to="/menu-page" style={{color: "white"}}>Tiếp tục thêm món ăn</Link>
+          <Link to="/menu-page" style={{ color: "white" }}>Tiếp tục thêm món ăn</Link>
         </button>
-        <button
-          className="btn btn-primary mr-3"
-          style={{ color: "white" }}
-          onClick={handleOrder}
-        >
-          Đặt món
-        </button>
-        <button className="btn btn-primary">
-          <Link to="/get-pay-page" style={{color: "white"}}>Thanh toán</Link>
-        </button>
+
+        {/* Nếu giỏ hàng đã có, hiển thị nút đặt món*/}
+        {totalQuantityCart > 0 && (
+          <>
+            <button
+              className="btn btn-primary mr-3"
+              style={{ color: "white" }}
+              onClick={handleOrder}
+            >
+              Đặt món
+            </button>
+          </>
+        )}
+
+        {/* Nếu đơn hàng đã có, hiển thị nút thanh toán */}
+        {totalQuantityOrder > 0 && (
+          <>
+            <button className="btn btn-primary">
+              <Link to="/get-pay-page" style={{ color: "white" }}>Thanh toán</Link>
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

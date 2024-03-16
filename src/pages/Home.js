@@ -6,11 +6,15 @@ import AboutChef from "../components/about/AboutChef";
 import FeedBack from "../components/about/FeedBack";
 import Post from "../components/post/Post";
 import OutstandingProduct from "../components/outstanding/OutstandingProduct";
+import { scrollToElement } from '../scrollUtils';
 const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
+    setTimeout(() => {
+      scrollToElement('scrollTarget');
+    });
   }, [dispatch]);
   return (
     <>

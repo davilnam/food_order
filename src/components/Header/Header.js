@@ -24,7 +24,7 @@ const Header = () => {
     dispatch(logout());
     dispatch(clearCartItems());
     dispatch(clearOrderItems());
-    navigate("/"); 
+    navigate("/login-page"); 
   };
 
   return (

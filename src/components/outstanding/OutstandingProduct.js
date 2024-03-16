@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../actions/actions"; // Import action addToCart
-
 const OutstandingProduct = () => {
   const staticUrl = "http://localhost:8080/api/home/file";
   const dispatch = useDispatch();
