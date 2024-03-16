@@ -2,21 +2,41 @@ import React, { useState, useEffect } from "react";
 import HeaderAdmin from "../Layout/HeaderAdmin";
 import { FaSearch, FaPencilAlt, FaTrash } from "react-icons/fa";
 import ModalAddAccount from "./ModalAddAccount";
+import ModalDeleteAccount from "./ModalDeleteAccount";
 import { saveCurrentPath } from "../../../actions/actions";
 import { useDispatch } from "react-redux";
 
 const AccountManagement = () => {
+  const [accounts, setAccounts] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [accountId, setAccountId] = useState("");
 
   const dispatch = useDispatch();
 
-  useEffect(() => {    
+  useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
+    fetchAccounts(); // Gọi hàm fetchAccounts khi component được tải
   }, [dispatch]);
 
-  const handleAddAccount = () => {
+  // Hàm để gửi yêu cầu GET đến API để lấy danh sách tài khoản
+  const fetchAccounts = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/account");
+      const data = await response.json();
+      if (data.success) {
+        setAccounts(data.data);
+      } else {
+        console.error("Error fetching accounts:", data.desc);
+      }
+    } catch (error) {
+      console.error("Error fetching accounts:", error);
+    }
+  };
 
-  }
+  const handleAddAccount = () => {
+    // Xử lý thêm tài khoản
+  };
 
   const toggleAddModal = () => {
     setShowAddModal(!showAddModal);
@@ -26,9 +46,59 @@ const AccountManagement = () => {
     setShowAddModal(true);
   };
 
+  const handleApproveAccount = async (accountId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/account/approve/${accountId}`,
+        {
+          method: "PUT", // Phương thức PUT để cập nhật trạng thái phê duyệt
+        }
+      );
+      const data = await response.json();
+      if (data.success) {
+        // Nếu phê duyệt thành công, cập nhật lại danh sách tài khoản
+        fetchAccounts();
+      } else {
+        console.error("Error approving account:", data.desc);
+      }
+    } catch (error) {
+      console.error("Error approving account:", error);
+    }
+  };
+
+  const handleDeleteAccount = async (accountId) => {
+    console.log(accountId);
+    try {      
+      const response = await fetch(
+        `http://localhost:4000/account/${accountId}`,
+        {
+          method: "DELETE", // Phương thức DELETE để xóa tài khoản
+        }
+      );
+      const data = await response.json();
+      if (data.success) {
+        // Nếu xóa thành công, cập nhật lại danh sách tài khoản
+        fetchAccounts();
+      } else {
+        console.error("Error deleting account:", data.desc);
+      }
+    } catch (error) {
+      console.error("Error deleting account:", error);
+    }
+  };
+
+  const toggleDeleteModal = () => {
+    setShowDeleteModal(!showDeleteModal);
+  };
+
+  const handleDeleteButtonClick = (id) => {
+    setAccountId(id);
+    setShowDeleteModal(true);
+  };
+
   return (
     <div className="content">
-      <HeaderAdmin></HeaderAdmin>
+      <HeaderAdmin />
       <div className="container-fluid pt-4 px-4">
         <div>
           <h3>Quản lý tài khoản</h3>
@@ -80,10 +150,46 @@ const AccountManagement = () => {
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {accounts.map((account, index) => (
+                <tr key={index}>
+                  <td>{account.id}</td>
+                  <td>{account.email}</td>
+                  <td>{account.fullName}</td>
+                  <td>{account.role}</td>
+                  <td>{account.phone}</td>
+                  <td>
+                    <button
+                      className="btn btn-danger mr-2"
+                      onClick={() => handleDeleteButtonClick(account.id)}
+                    >
+                      <FaTrash />
+                    </button>
+                    {account.status ? (
+                      ""
+                    ) : (
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleApproveAccount(account.id)}
+                      >
+                        Phê duyệt
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </div>
+      {showDeleteModal && (
+        <ModalDeleteAccount
+          isOpen={showDeleteModal}
+          toggle={toggleDeleteModal}
+          accountId={accountId}
+          handleDelete={handleDeleteAccount}
+        />
+      )}
     </div>
   );
 };

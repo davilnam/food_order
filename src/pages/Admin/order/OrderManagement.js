@@ -4,6 +4,7 @@ import { saveCurrentPath } from "../../../actions/actions";
 import HeaderAdmin from "../Layout/HeaderAdmin";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
+
 const OrderManagement = () => {
   const dispatch = useDispatch();
   const [orders, setOrders] = useState([]);
@@ -107,7 +108,10 @@ const OrderManagement = () => {
           </table>
           {/* Phân trang */}
           <ul className="pagination">
-            {Array.from({ length: Math.ceil(orders.length / ordersPerPage) }, (_, i) => i + 1).map((number) => (
+            {Array.from(
+              { length: Math.ceil(orders.length / ordersPerPage) },
+              (_, i) => i + 1
+            ).map((number) => (
               <li key={number} className="page-item">
                 <button onClick={() => paginate(number)} className="page-link">
                   {number}
