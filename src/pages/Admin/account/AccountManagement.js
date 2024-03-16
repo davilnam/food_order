@@ -22,8 +22,14 @@ const AccountManagement = () => {
   // Hàm để gửi yêu cầu GET đến API để lấy danh sách tài khoản
   const fetchAccounts = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/user/get-all");
-      const data = await response.json();
+        const accessToken = localStorage.getItem("accessToken");
+        const response = await fetch(`http://localhost:8080/api/order/get-all`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        const data = await response.json();
       if (data.success) {
         setAccounts(data.data);
       } else {
@@ -155,8 +161,8 @@ const AccountManagement = () => {
                 <tr key={index}>
                   <td>{account.id}</td>
                   <td>{account.email}</td>
-                  <td>{account.fullName}</td>
                   <td>{account.role}</td>
+                  <td>{account.fullName}</td>
                   <td>{account.phone}</td>
                   <td>
                     <button
