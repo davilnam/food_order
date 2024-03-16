@@ -87,6 +87,7 @@ const ProductManagement = () => {
         }
       );
       // Xử lý response ở đây nếu cần
+      fetchFoods()
     } catch (error) {
       console.error("Error updating food:", error);
       // Xử lý lỗi ở đây nếu cần

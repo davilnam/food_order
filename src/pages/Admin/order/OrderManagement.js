@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { saveCurrentPath } from "../../../actions/actions";
 import HeaderAdmin from "../Layout/HeaderAdmin";
 import { FaSearch } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const OrderManagement = () => {
   const dispatch = useDispatch();
@@ -80,21 +81,32 @@ const OrderManagement = () => {
             <tbody>
               {currentOrders.map((order, index) => (
                 <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{order.name}</td>
+                  <td>{order.id}</td>
+                  <td>{order.userName}</td>
                   <td>{order.time}</td>
                   <td>{order.customer_phone_number}</td>
                   <td>{order.totalPrice}</td>
                   <td>{order.status ? "Đã xử lý" : "Chưa xử lý"}</td>
                   <td>{order.is_pay ? "Đã thanh toán" : "Chưa thanh toán"}</td>
-                  <td><button className="btn btn-secondary">Chi tiết</button></td> {/* Bổ sung liên kết đến trang chi tiết đơn hàng */}
+                  <td>
+                    <Link
+                      to={`/admin/get-detail/${order.id}`}
+                      className="btn btn-secondary"
+                    >
+                      Chi tiết
+                    </Link>
+                  </td>
+                  {/* Bổ sung liên kết đến trang chi tiết đơn hàng */}
                 </tr>
               ))}
             </tbody>
           </table>
           {/* Phân trang */}
           <ul className="pagination">
-            {Array.from({ length: Math.ceil(orders.length / ordersPerPage) }, (_, i) => i + 1).map((number) => (
+            {Array.from(
+              { length: Math.ceil(orders.length / ordersPerPage) },
+              (_, i) => i + 1
+            ).map((number) => (
               <li key={number} className="page-item">
                 <button onClick={() => paginate(number)} className="page-link">
                   {number}

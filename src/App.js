@@ -18,6 +18,7 @@ import FoodDetail from "./components/detail_food/FoodDetail";
 import Cart from "./components/cart/Cart";
 import ThankYouPage from "./pages/ThankYouPage";
 import Payment from "./components/payment/Payment";
+import OrderDetail from "./pages/Admin/order/OrderDetail";
 import Counter from "./pages/Counter/Counter";
 import NotFound from "./components/NotFound";
 import LayoutUser from "./pages/LayoutUser";
@@ -53,6 +54,7 @@ const App = () => {
           <Route path="managerAccount" element={<AccountManagement />}></Route>
           <Route path="category" element={<CategoryManagement />}></Route>
           <Route path="managerFood" element={<ProductManagement />}></Route>
+          <Route path="get-detail/:orderId" element={<OrderDetail />}></Route>
           {/* Thêm một Route cuối cùng với path="*" để xử lý các trang không hợp lệ */}
           <Route path="*" element={<Navigate to="/not-found" />} />
         </Route>
