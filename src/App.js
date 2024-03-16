@@ -54,7 +54,7 @@ const App = () => {
           <Route path="manager-account" element={<AccountManagement />}></Route>
           <Route path="manager-category" element={<CategoryManagement />}></Route>
           <Route path="manager-food" element={<ProductManagement />}></Route>
-          <Route path="get-detail/:orderId" element={<OrderDetail />}></Route>
+          <Route path="order/get-detail/:orderId" element={<OrderDetail />}></Route>
           {/* Thêm một Route cuối cùng với path="*" để xử lý các trang không hợp lệ */}
           <Route path="*" element={<Navigate to="/not-found" />} />
         </Route>
