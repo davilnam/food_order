@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 
 const OrderDetail = () => {
+  const staticUrl = "http://localhost:8080/api/home/file";
   const { orderId } = useParams();
   const [orderDetail, setOrderDetail] = useState(null);
 
@@ -13,9 +14,13 @@ const OrderDetail = () => {
 
   const fetchOrderDetail = async (orderId) => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/get-detail/${orderId}`
-      );
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await fetch(`http://localhost:8080/api/order/get-detail/${orderId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       const data = await response.json();
       if (data.success) {
         setOrderDetail(data.data);
@@ -39,36 +44,40 @@ const OrderDetail = () => {
           <Col md="6">
             <div body className="mb-4">
               <h5 className="card-title">Thông tin đơn hàng</h5>
-              <p className="card-text">
-                <strong>Tên bàn:</strong> {orderDetail.userName}
-              </p>
-              <p className="card-text">
-                <strong>Ngày đặt:</strong>{" "}
-                {new Date(orderDetail.time).toLocaleDateString()}
-              </p>
-              <p className="card-text">
-                <strong>Tổng giá:</strong> ${orderDetail.totalPrice.toFixed(2)}
-              </p>
-              <p className="card-text">
-                <strong>Trạng thái:</strong>{" "}
-                {orderDetail.status ? "Đã xử lý" : "Chưa xử lý"}
-              </p>
-              <p className="card-text">
-                <strong>Thanh toán:</strong>{" "}
-                {orderDetail.is_pay ? "Đã thanh toán" : "Chưa thanh toán"}
-              </p>
+              <table className="table">
+              <tbody>
+                <tr>
+                  <td><strong>Vị trí bàn:</strong></td>
+                  <td>{orderDetail.userName}</td>
+                </tr>
+                <tr>
+                  <td><strong>Ngày đặt:</strong></td>
+                  <td>{new Date(orderDetail.time).toLocaleDateString()}</td>
+                </tr>
+                <tr>
+                  <td><strong>Giá trị hóa đơn:</strong></td>
+                  <td>${orderDetail.totalPrice.toFixed(2)}</td>
+                </tr>
+                <tr>
+                  <td><strong>Trạng thái:</strong></td>
+                  <td>{orderDetail.status ? "Đã phục vụ" : "Chưa phục vụ"}</td>
+                </tr>
+                <tr>
+                  <td><strong>Thanh toán:</strong></td>
+                  <td>{orderDetail.is_pay ? "Đã thanh toán" : "Chưa thanh toán"}</td>
+                </tr>
+              </tbody>
+            </table>
             </div>
           </Col>
-        </Row>
-        <Row>
-          <Col md="12">
+          <Col md="6">
             <h5>Chi tiết sản phẩm</h5>
             {orderDetail.detailResponeList.map((item, index) => (
               <div key={index} body className="mb-3">
                 <Row>
                   <Col xs="12" md="4" className="mb-3 mb-md-0">
                     <img
-                      src={require(`../../../assets/images/${item.image}`)}
+                      src={`${staticUrl}/food/${item.image}`}
                       alt={item.foodName}
                       className="img-fluid"
                     />
@@ -86,7 +95,7 @@ const OrderDetail = () => {
             ))}
           </Col>
         </Row>
-        <Link to="/admin/managerOrder" className="btn btn-secondary mb-4">Quay lại</Link>
+        <Link to="/admin/manager-order" className="btn btn-secondary mb-4">Quay lại</Link>
       </Container>
       
     </div>

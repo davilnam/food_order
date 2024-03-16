@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart, saveCurrentPath } from "../actions/actions";
 import { Link } from "react-router-dom";
+import { scrollToElement } from '../scrollUtils';
 
 const PageMenu = () => {
+  const staticUrl = "http://localhost:8080/api/home/file";
   const dispatch = useDispatch();
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(0); // Đặt selectedCategory mặc định là 0
@@ -11,11 +13,14 @@ const PageMenu = () => {
   useEffect(() => {
     fetchCategories();
     dispatch(saveCurrentPath(window.location.pathname));
-  }, [dispatch]);
+    setTimeout(() => {
+      scrollToElement('scrollTarget');
+    });
+  }, []);
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:4000/category");
+      const response = await fetch("http://localhost:8080/api/home/category");
       const data = await response.json();
       setCategories(data.data);
     } catch (error) {
@@ -32,9 +37,10 @@ const PageMenu = () => {
     const foodWithDefaultQuantity = { ...food, quantity: 1 }; // Tạo một bản sao của food với quantity mặc định là 1
     dispatch(addToCart(foodWithDefaultQuantity)); // Dispatch action addToCart với thông tin sản phẩm có số lượng mặc định
   };
+  
 
   return (
-    <section className="ftco-section">
+    <section id="scrollTarget" className="ftco-section">
       <div className="container">
         <div className="ftco-search">
           <div className="row">
@@ -82,7 +88,7 @@ const PageMenu = () => {
                                 foodIndex % 2 !== 0 ? "order-md-last" : ""
                               }`}
                               style={{
-                                backgroundImage: `url(${require(`../assets/images/${food.image}`)})`,
+                                backgroundImage: `url(${staticUrl}/food/${food.image})`,
                               }}
                             ></div>
                             <div className="text d-flex align-items-center productBody">

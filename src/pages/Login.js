@@ -4,12 +4,16 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { loginSuccess, saveCurrentPath, clearCartItems, clearOrderItems } from "../actions/actions";
 import "../styles/css/login.css";
-
+import { scrollToElement } from '../scrollUtils';
 const Login = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
+    dispatch(saveCurrentPath(window.location.pathname));
+    setTimeout(() => {
+      scrollToElement('scrollTarget');
+    });
   }, [dispatch]);
 
   const navigate = useNavigate(); // Sửa đổi tại đây
@@ -28,7 +32,7 @@ const Login = () => {
     console.log({email, password})
 
     try {
-      const response = await fetch("http://localhost:4000/login", {
+      const response = await fetch("http://localhost:8080/api/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,6 +47,7 @@ const Login = () => {
       }
 
       const data = await response.json();
+
       let isAdmin = false;
       let isCounter = false;
       if (data.desc === "[SUPERADMIN]") {
@@ -50,6 +55,7 @@ const Login = () => {
       } else if(data.desc === "[ADMIN]"){
         isCounter = true;
       }
+
       // Cập nhật reducer và localStorage
       const user = {title: data.title, userId: data.id};
       dispatch(loginSuccess({user: user, isAdmin: isAdmin, isCounter: isCounter})); // Cập nhật thông tin người dùng
