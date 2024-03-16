@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Container, Row, Col, Card } from "reactstrap";
+import { Link, useParams } from "react-router-dom";
+import { Container, Row, Col } from "reactstrap";
 
 const OrderDetail = () => {
   const { orderId } = useParams();
@@ -86,7 +86,9 @@ const OrderDetail = () => {
             ))}
           </Col>
         </Row>
+        <Link to="/admin/managerOrder" className="btn btn-secondary mb-4">Quay lại</Link>
       </Container>
+      
     </div>
   );
 };
