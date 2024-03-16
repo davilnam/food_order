@@ -5,14 +5,21 @@ import {
   LOGOUT,
   ADD_TO_CART,
   REMOVE_FROM_CART,
+  UPDATE_CART_ITEM_QUANTITY,
+  CLEAR_CART_ITEMS,
+  ORDER_ITEMS,
+  CLEAR_ORDER_ITEMS,
 } from "../actions/actionTypes";
 
 const initialState = {
   isSidebarOpen: false,
   isLoggedIn: false,
   isAdmin: false,
+  isCounter: false,
   user: null,
+  currentPath: "/",
   cartItems: [],
+  cartItemsOrder: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -22,27 +29,27 @@ const reducer = (state = initialState, action) => {
         ...state,
         isSidebarOpen: !state.isSidebarOpen,
       };
-    case LOGIN_SUCCESS:      
+    case LOGIN_SUCCESS:
       return {
         ...state,
         isLoggedIn: true,
-        user: action.payload.title,
-        isAdmin: action.payload.check
+        user: action.payload.user,
+        isAdmin: action.payload.isAdmin,
+        isCounter: action.payload.isCounter
       };
     case LOGOUT:
       return {
         ...state,
         isLoggedIn: false,
+        isAdmin: false,
+        isCounter: false,
         user: null,
       };
-    case ADD_TO_CART:
-      console.log(action.payload);
+    case ADD_TO_CART:            
       // Kiểm tra xem món hàng đã tồn tại trong giỏ hàng chưa
       const existingItemIndex = state.cartItems.findIndex(
         (item) => item.id === action.payload.id
-      );
-      console.log(existingItemIndex);
-
+      );      
       if (existingItemIndex !== -1) {
         // Nếu món hàng đã tồn tại, tăng số lượng lên một
         console.log(state.cartItems);
@@ -53,13 +60,11 @@ const reducer = (state = initialState, action) => {
           cartItems: updatedCartItems,
         };
       } else {
-        // Nếu món hàng chưa tồn tại, thêm vào giỏ hàng
-        console.log(state.cartItems);              
+        // Nếu món hàng chưa tồn tại, thêm vào giỏ hàng        
         return {
           ...state,
           cartItems: [...state.cartItems, action.payload],
         };
-                    
       }
     case REMOVE_FROM_CART:
       const updatedCartItems = state.cartItems.filter(
@@ -68,6 +73,60 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         cartItems: updatedCartItems,
+      };
+    case "SAVE_CURRENT_PATH":
+      return {
+        ...state,
+        currentPath: action.payload,
+      };
+    case UPDATE_CART_ITEM_QUANTITY:
+      return {
+        ...state,
+        cartItems: state.cartItems.map((item) =>
+          item.id === action.payload.itemId
+            ? { ...item, quantity: action.payload.quantity }
+            : item
+        ),
+      };
+    case CLEAR_CART_ITEMS:
+      return {
+        ...state,
+        cartItems: [], // Xóa tất cả sản phẩm trong cartItem bằng cách gán mảng rỗng
+      };
+    case ORDER_ITEMS:
+      
+      if (state.cartItemsOrder && state.cartItemsOrder.length > 0) {
+        console.log(state.cartItemsOrder);
+        console.log(state.cartItems);
+        let updatedOrderItems = [...state.cartItemsOrder]
+        let cartItemsCopy = [...state.cartItems]
+        for (let i = 0; i < updatedOrderItems.length; i++) {                    
+          for (let j = 0; j < cartItemsCopy.length; j++) {
+            if (updatedOrderItems[i].id === cartItemsCopy[j].id) {
+              updatedOrderItems[i].quantity += cartItemsCopy[j].quantity;
+              cartItemsCopy.splice(j, 1);                      
+            }
+          }          
+        }
+        updatedOrderItems = updatedOrderItems.concat(cartItemsCopy);
+        console.log(updatedOrderItems);
+        return {
+          ...state,
+          cartItemsOrder: updatedOrderItems,
+          cartItems: [], // Xóa các sản phẩm trong cartItems sau khi order
+        };
+      } else {
+        return {
+          ...state,
+          cartItemsOrder: [...state.cartItems],
+          cartItems: [], // Xóa các sản phẩm trong cartItems sau khi order
+        };
+      }
+
+    case CLEAR_ORDER_ITEMS:
+      return {
+        ...state,
+        cartItemsOrder: [],
       };
     default:
       return state;

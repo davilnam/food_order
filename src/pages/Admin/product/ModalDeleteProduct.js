@@ -4,6 +4,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 const ModalDeleteProduct = ({ isOpen, toggle, foodId, handleDeleteFood }) => {
     const handleConfirmDelete = () => {
         // Xử lý xóa sản phẩm
+        handleDeleteFood(foodId);
         // Có thể gọi hàm toggle để đóng modal sau khi xác nhận xóa
         toggle();
     };

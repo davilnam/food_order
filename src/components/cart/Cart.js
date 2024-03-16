@@ -1,107 +1,241 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart } from "../../actions/actions";
+import {
+  removeFromCart,
+  saveCurrentPath,
+  updateCartItemQuantity,
+  orderItems,
+} from "../../actions/actions";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
+  const staticUrl = "http://localhost:8080/api/home/file";
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.app.cartItems);
+  const user = useSelector((state) => state.app.user);
+  const cartItemsOrder = useSelector((state) => state.app.cartItemsOrder);
+  console.log(cartItems);
+  console.log(cartItemsOrder);
 
-  const [itemQuantities, setItemQuantities] = useState(
-    cartItems.reduce((quantities, item) => {
-      quantities[item.id] = item.quantity; // Khởi tạo giá trị ban đầu của số lượng sản phẩm
-      return quantities;
-    }, {})
-  );
+  const [itemQuantitiesCart, setItemQuantitiesCart] = useState({});
+  const [itemQuantitiesOrder, setItemQuantitiesOrder] = useState({});
+  const [totalPriceCart, setTotalPriceCart] = useState(0);
+  const [totalPriceOrder, setTotalPriceOrder] = useState(0);
 
-  // Cập nhật itemQuantities khi cartItems thay đổi
   useEffect(() => {
-    const updatedItemQuantities = cartItems.reduce((quantities, item) => {
+    const updatedItemQuantitiesCart = cartItems.reduce((quantities, item) => {
       quantities[item.id] = item.quantity;
       return quantities;
     }, {});
-    setItemQuantities(updatedItemQuantities);
-  }, [cartItems]);
+    setItemQuantitiesCart(updatedItemQuantitiesCart);
 
-  const totalQuantity = Object.values(itemQuantities).reduce(
+    const updatedItemQuantitiesOrder = cartItemsOrder.reduce(
+      (quantities, item) => {
+        quantities[item.id] = item.quantity;
+        return quantities;
+      },
+      {}
+    );
+    setItemQuantitiesOrder(updatedItemQuantitiesOrder);
+
+    const updatedTotalPriceCart = cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+    setTotalPriceCart(updatedTotalPriceCart);
+
+    const updatedTotalPriceOrder = cartItemsOrder.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+    setTotalPriceOrder(updatedTotalPriceOrder);
+
+    dispatch(saveCurrentPath(window.location.pathname));
+  }, [cartItems, cartItemsOrder, dispatch]);
+
+  const totalQuantityCart = Object.values(itemQuantitiesCart).reduce(
     (total, quantity) => total + quantity,
     0
   );
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + item.price * itemQuantities[item.id],
+
+  const totalQuantityOrder = Object.values(itemQuantitiesOrder).reduce(
+    (total, quantity) => total + quantity,
     0
   );
 
   const handleQuantityChange = (id, quantity) => {
-    setItemQuantities({ ...itemQuantities, [id]: quantity }); // Cập nhật số lượng sản phẩm
+    setItemQuantitiesCart({ ...itemQuantitiesCart, [id]: quantity });
+    dispatch(updateCartItemQuantity(id, quantity));
+
+    const updatedTotalPriceCart = cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+    setTotalPriceCart(updatedTotalPriceCart);
   };
 
   const handleRemoveFromCart = (id) => {
     dispatch(removeFromCart(id));
   };
 
+  const fetchOrders = async (cartItems) => {
+    const reducedArray = cartItems.map(item => {
+      return {
+        foodID: item.id,
+        number: item.quantity
+      };
+    });
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await fetch("http://localhost:8080/api/order/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ userId: user.userId, orderItemDTOList: reducedArray })
+      });
+      if (!response.ok) {
+        throw new Error("Failed to add category");
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
+
+  const handleOrder = () => {
+    fetchOrders(cartItems);
+    dispatch(orderItems());
+  };
+
   return (
     <div className="container">
-      <h1 className="my-4">Danh sách sản phẩm</h1>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">Hình ảnh</th>
-            <th scope="col">Tên sản phẩm</th>
-            <th scope="col">Giá</th>
-            <th scope="col">Số lượng</th>
-            <th scope="col">Tổng cộng</th>
-            <th scope="col">Tùy chọn</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cartItems.map((item) => (
-            <tr key={item.id}>
-              <td>
-                <img
-                  src={require(`../../assets/images/${item.image}`)}
-                  alt={item.name}
-                  className="img-fluid"
-                  style={{ maxWidth: "100px" }}
-                />
-              </td>
-              <td>{item.title}</td>
-              <td>${item.price}</td>
-              <td>
-                <input
-                  type="number"
-                  value={itemQuantities[item.id]}
-                  onChange={(e) =>
-                    handleQuantityChange(item.id, parseInt(e.target.value))
-                  }
-                  min="1"
-                  className="form-control"
-                />
-              </td>
-              <td>${item.price * itemQuantities[item.id]}</td>
-              <td>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleRemoveFromCart(item.id)}
-                >
-                  Xóa
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="d-flex justify-content-between">
-        <p>Tổng số sản phẩm: {totalQuantity}</p>
-        <p>Tổng tiền: ${totalPrice}</p>
+      <div className="row">
+        {cartItemsOrder && cartItemsOrder.length > 0 ? (
+          <div>
+            <h2>Danh sách các món đã đặt hàng</h2>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">Hình ảnh</th>
+                  <th scope="col">Tên sản phẩm</th>
+                  <th scope="col">Giá</th>
+                  <th scope="col">Số lượng</th>
+                  <th scope="col">Tổng cộng</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cartItemsOrder.map((item) => (
+                  <tr key={item.id}>
+                    <td>
+                      <img
+                        src={`${staticUrl}/food/${item.image}`}
+                        alt={item.title}
+                        className="img-fluid"
+                        style={{ maxWidth: "100px" }}
+                      />
+                    </td>
+                    <td>{item.title}</td>
+                    <td>${item.price}</td>
+                    <td>{item.quantity}</td>
+                    <td>${item.price * item.quantity}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="d-flex justify-content-between">
+              <p>Số món đã đặt: {totalQuantityOrder}</p>
+              <p>Giá trị hóa đơn: ${totalPriceOrder}</p>
+            </div>
+          </div>
+        ) : (
+          <div className="mt-3">Không có món hàng nào được đặt.</div>
+        )}
       </div>
+
+      <div className="row">
+        <h1 className="my-4">Danh sách sản phẩm</h1>
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Hình ảnh</th>
+              <th scope="col">Tên sản phẩm</th>
+              <th scope="col">Giá</th>
+              <th scope="col">Số lượng</th>
+              <th scope="col">Tổng cộng</th>
+              <th scope="col">Tùy chọn</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cartItems.map((item) => (
+              <tr key={item.id}>
+                <td>
+                  <img
+                    src={`${staticUrl}/food/${item.image}`}
+                    alt={item.name}
+                    className="img-fluid"
+                    style={{ maxWidth: "100px" }}
+                  />
+                </td>
+                <td>{item.title}</td>
+                <td>${item.price}</td>
+                <td>
+                  <input
+                    type="number"
+                    value={itemQuantitiesCart[item.id]}
+                    onChange={(e) =>
+                      handleQuantityChange(item.id, parseInt(e.target.value))
+                    }
+                    min="1"
+                    className="form-control"
+                  />
+                </td>
+                <td>${item.price * itemQuantitiesCart[item.id]}</td>
+                <td>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleRemoveFromCart(item.id)}
+                  >
+                    Xóa
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="d-flex justify-content-between">
+          <p>Tổng số sản phẩm: {totalQuantityCart}</p>
+          <p>Tổng tiền: ${totalPriceCart}</p>
+        </div>
+      </div>
+
       <div className="text-right pb-5">
+        {/* Nút tiếp tục thêm món ăn */}
         <button className="btn btn-secondary mr-3">
-          <Link to="/menu" style={{color: "white"}}>Tiếp tục thêm món ăn</Link>
+          <Link to="/menu-page" style={{ color: "white" }}>Tiếp tục thêm món ăn</Link>
         </button>
-        <button className="btn btn-primary">
-          <Link to="/payment" style={{color: "white"}}>Thanh toán</Link>
-        </button>
+
+        {/* Nếu giỏ hàng đã có, hiển thị nút đặt món*/}
+        {totalQuantityCart > 0 && (
+          <>
+            <button
+              className="btn btn-primary mr-3"
+              style={{ color: "white" }}
+              onClick={handleOrder}
+            >
+              Đặt món
+            </button>
+          </>
+        )}
+
+        {/* Nếu đơn hàng đã có, hiển thị nút thanh toán */}
+        {totalQuantityOrder > 0 && (
+          <>
+            <button className="btn btn-primary">
+              <Link to="/get-pay-page" style={{ color: "white" }}>Thanh toán</Link>
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

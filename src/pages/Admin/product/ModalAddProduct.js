@@ -14,25 +14,36 @@ const ImageInput = ({ onChange }) => {
   const [imageSrc, setImageSrc] = useState("");
 
   const handleImageChange = (event) => {
-      const file = event.target.files[0];
-      if (file) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-              setImageSrc(e.target.result);
-          };
-          reader.readAsDataURL(file);
-          onChange(file); // Truyền tệp hình ảnh đã chọn ra bên ngoài
-      }
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        setImageSrc(e.target.result);
+      };
+      reader.readAsDataURL(file);
+      onChange(file); // Truyền tệp hình ảnh đã chọn ra bên ngoài
+    }
   };
 
   return (
-      <FormGroup>
-          <Label for="imageInput">Ảnh Sản Phẩm</Label>
-          <Input type="file" name="imageInput" id="imageInput" onChange={handleImageChange} accept="image/*" />
-          {imageSrc && (
-              <img src={imageSrc} alt="Preview" className="preview-image" style={{ marginTop: "10px", maxWidth: "100px", maxHeight: "100px" }} />
-          )}
-      </FormGroup>
+    <FormGroup>
+      <Label for="imageInput">Ảnh Sản Phẩm</Label>
+      <Input
+        type="file"
+        name="imageInput"
+        id="imageInput"
+        onChange={handleImageChange}
+        accept="image/*"
+      />
+      {imageSrc && (
+        <img
+          src={imageSrc}
+          alt="Preview"
+          className="preview-image"
+          style={{ marginTop: "10px", maxWidth: "100px", maxHeight: "100px" }}
+        />
+      )}
+    </FormGroup>
   );
 };
 
@@ -59,14 +70,6 @@ const ModalAddProduct = ({ isOpen, toggle, listCategory, handleSaveFood }) => {
     const { value } = event.target;
     if (key === "category") {
       setSelectedCategory(value);
-    } else if (key === "image") {
-      if (event.target.files.length > 0) {
-        const fileName = event.target.files[0].name;        
-        setFood((prevFood) => ({
-          ...prevFood,
-          [key]: fileName,
-        }));
-      }
     } else {
       setFood((prevFood) => ({
         ...prevFood,
@@ -77,12 +80,12 @@ const ModalAddProduct = ({ isOpen, toggle, listCategory, handleSaveFood }) => {
 
   const handleImageChange = (file) => {
     // Cập nhật tên tệp hình ảnh vào newFood
-    
-    setFood(prevFood => ({
-        ...prevFood,
-        image: file.name,
+
+    setFood((prevFood) => ({
+      ...prevFood,
+      image: file,
     }));
-};
+  };
 
   const handleSaveButtonClick = () => {
     handleSaveFood(food);
@@ -113,7 +116,8 @@ const ModalAddProduct = ({ isOpen, toggle, listCategory, handleSaveFood }) => {
             required
           />
         </FormGroup>
-        <ImageInput onChange={handleImageChange} /> {/* Sử dụng component ImageInput */}
+        <ImageInput onChange={handleImageChange} />{" "}
+        {/* Sử dụng component ImageInput */}
         <FormGroup>
           <Label for="category">Danh Mục</Label>
           <Input

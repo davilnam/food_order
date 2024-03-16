@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import HeaderAdmin from "../Layout/HeaderAdmin";
 import { FaSearch, FaPencilAlt, FaTrash } from "react-icons/fa";
 import ModalAddAccount from "./ModalAddAccount";
+import { saveCurrentPath } from "../../../actions/actions";
+import { useDispatch } from "react-redux";
 
 const AccountManagement = () => {
   const [showAddModal, setShowAddModal] = useState(false);
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {    
+    dispatch(saveCurrentPath(window.location.pathname));
+  }, [dispatch]);
 
   const handleAddAccount = () => {
 
@@ -65,11 +72,11 @@ const AccountManagement = () => {
           <table className="table">
             <thead>
               <tr>
-                <th>#</th>
+                <th>STT</th>
                 <th>Email</th>
                 <th>Name</th>
                 <th>Role</th>
-                <th>Phone</th>
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>

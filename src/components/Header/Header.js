@@ -1,17 +1,30 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaBars, FaShoppingCart } from "react-icons/fa";
 import { faPhoneAlt, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
-import "../../styles/css/header.css"
+import { useSelector, useDispatch } from "react-redux";
+import { logout, clearCartItems, clearOrderItems } from "../../actions/actions";
+import "../../styles/css/header.css";
 
 const Header = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const cartItems = useSelector(state => state.app.cartItems); // Lấy số lượng sản phẩm trong giỏ hàng từ Redux store
-
+  const cartItems = useSelector((state) => state.app.cartItems); // Lấy số lượng sản phẩm trong giỏ hàng từ Redux store
+  let { user, isLoggedIn } = useSelector((state) => state.app);
+  // isLoggedIn = true;
+  // user = {title:"Bàn 1", userId: 1}
   const toggleMobileMenu = () => {
     setShowMobileMenu(!showMobileMenu);
+  };
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(clearCartItems());
+    dispatch(clearOrderItems());
+    navigate("/login-page"); 
   };
 
   return (
@@ -78,7 +91,7 @@ const Header = () => {
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
                 <NavLink
-                  to="/"
+                  to="/home-page"
                   className={({ isActive }) => {
                     const activeClass = isActive ? "activeHome" : "";
                     return `nav-link ${activeClass}`;
@@ -89,7 +102,7 @@ const Header = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  to="/about"
+                  to="/about-page"
                   className={({ isActive }) => {
                     const activeClass = isActive ? "activeHome" : "";
                     return `nav-link ${activeClass}`;
@@ -100,7 +113,7 @@ const Header = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  to="/menu"
+                  to="/menu-page"
                   className={({ isActive }) => {
                     const activeClass = isActive ? "activeHome" : "";
                     return `nav-link ${activeClass}`;
@@ -111,7 +124,7 @@ const Header = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  to="/blog"
+                  to="/blog-page"
                   className={({ isActive }) => {
                     const activeClass = isActive ? "activeHome" : "";
                     return `nav-link ${activeClass}`;
@@ -122,7 +135,7 @@ const Header = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  to="/contact"
+                  to="/contact-page"
                   className={({ isActive }) => {
                     const activeClass = isActive ? "activeHome" : "";
                     return `nav-link ${activeClass}`;
@@ -132,49 +145,64 @@ const Header = () => {
                 </NavLink>
               </li>
             </ul>
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <NavLink
-                  to="/login"
-                  className={({ isActive }) => {
-                    const activeClass = isActive ? "activeHome" : "";
-                    return `nav-link ${activeClass}`;
-                  }}
-                >
-                  Đăng nhập
-                </NavLink>
-              </li>
-              {/* <li className="nav-item">
-                <NavLink
-                  to="/register"
-                  className={({ isActive }) => {
-                    const activeClass = isActive ? "activeHome" : "";
-                    return `nav-link ${activeClass}`;
-                  }}
-                >
-                  Đăng ký
-                </NavLink>
-              </li> */}
-              <li className="nav-item">
-                <NavLink to="/cart" className="nav-link">
-                  <div
-                    className="cart-icon"
-                    style={{
-                      height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <FaShoppingCart size={24}/>
-                    {cartItems && (
-                      <div className="cart-item-count">
-                        <span>{cartItems.length}</span>
-                      </div>
-                    )}
-                  </div>
-                </NavLink>
-              </li>
-            </ul>
+            {isLoggedIn ? (
+              <ul className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <span className="nav-link">{user.title}</span>
+                </li>
+                <li className="nav-item">
+                  <button className="nav-link" onClick={handleLogout}>
+                    Đăng xuất
+                  </button>
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/cart-detail-page" className="nav-link">
+                    <div
+                      className="cart-icon"
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <FaShoppingCart size={24} />
+                      {cartItems && (
+                        <div className="cart-item-count">
+                          <span>{cartItems.length}</span>
+                        </div>
+                      )}
+                    </div>
+                  </NavLink>
+                </li>
+              </ul>
+            ) : (
+              <ul className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <NavLink to="/login-page" className="nav-link">
+                    Đăng nhập
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/cart-detail-page" className="nav-link">
+                    <div
+                      className="cart-icon"
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <FaShoppingCart size={24} />
+                      {cartItems && (
+                        <div className="cart-item-count">
+                          <span>{cartItems.length}</span>
+                        </div>
+                      )}
+                    </div>
+                  </NavLink>
+                </li>
+              </ul>
+            )}
           </div>
         </div>
       </nav>

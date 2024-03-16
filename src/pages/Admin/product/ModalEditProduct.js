@@ -52,7 +52,7 @@ const ModalEditProduct = ({ isOpen, toggle, food, listCategory, handleUpdateFood
         setImageSrc("")
         setNewFood(prevFood => ({
             ...prevFood,
-            image: file.name,
+            image: file,
         }));
     };
 

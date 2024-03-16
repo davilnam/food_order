@@ -1,15 +1,52 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { saveCurrentPath, clearOrderItems } from "../../actions/actions";
+import { useNavigate } from "react-router-dom";
 
 const Payment = () => {
-  const cartItems = useSelector((state) => state.app.cartItems);
+  const cartItemsOrder = useSelector((state) => state.app.cartItemsOrder);
+  const [customerInfo, setCustomerInfo] = useState({
+    fullName: "",
+    tableName: "",
+    phoneNumber: "",
+    email: "",
+  });
+  const [paymentMethod, setPaymentMethod] = useState("");
 
-  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const totalPrice = cartItemsOrder.reduce((total, item) => total + item.price * item.quantity, 0);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(saveCurrentPath(window.location.pathname));
+  }, [dispatch]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setCustomerInfo({ ...customerInfo, [name]: value });
+  };
+
+  const handlePaymentMethodChange = (e) => {
+    setPaymentMethod(e.target.value);
+  };
+
+  const navigate = useNavigate();
+
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Xử lý logic khi người dùng ấn nút Đặt hàng
+    console.log("Thông tin khách hàng:", customerInfo);
+    console.log("Phương thức thanh toán:", paymentMethod);
+    console.log("Giỏ hàng:", cartItemsOrder);
+    // gọi api thanh toán thành công thì chuyên qua trang cảm ơn và xóa hết sản phẩm trong giỏ hàng
+    dispatch(clearOrderItems());
+    navigate("/thankYou");
+  };
 
   return (
     <section role="main" className="pb-5">
       <div className="container mt-4">
-        <form className="needs-validation" name="frmthanhtoan" method="post" action="#">
+        <form className="needs-validation" onSubmit={handleSubmit}>
           <input type="hidden" name="kh_tendangnhap" value="dnpcuong" />
 
           <div className="py-5 text-center">
@@ -22,10 +59,10 @@ const Payment = () => {
             <div className="col-md-4 order-md-2 mb-4">
               <h4 className="d-flex justify-content-between align-items-center mb-3">
                 <span className="text-muted">Giỏ hàng</span>
-                <span className="badge badge-secondary badge-pill">{cartItems.length}</span>
+                <span className="badge badge-secondary badge-pill">{cartItemsOrder.length}</span>
               </h4>
               <ul className="list-group mb-3">
-                {cartItems.map((item) => (
+                {cartItemsOrder.map((item) => (
                   <li key={item.id} className="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
                       <h6 className="my-0">{item.title}</h6>
@@ -38,53 +75,105 @@ const Payment = () => {
             </div>
             <div className="col-md-8 order-md-1">
               <h4 className="mb-3">Thông tin khách hàng</h4>
-              {/* Form thông tin khách hàng sẽ được thêm vào đây */}
-              <div class="row">
-                            <div class="col-md-12">
-                                <label for="kh_ten">Họ tên</label>
-                                <input type="text" class="form-control" name="kh_ten" id="kh_ten"
-                                    value="" readonly="" />
-                            </div>                            
-                            <div class="col-md-12">
-                                <label for="kh_diachi">Bàn số</label>
-                                <select class="form-control">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                </select>                               
-                            </div>
-                            <div class="col-md-12">
-                                <label for="kh_dienthoai">Điện thoại</label>
-                                <input type="text" class="form-control" name="kh_dienthoai" id="kh_dienthoai"
-                                    value="" readonly="" />
-                            </div>
-                            <div class="col-md-12">
-                                <label for="kh_email">Email</label>
-                                <input type="text" class="form-control" name="kh_email" id="kh_email"
-                                    value="" readonly="" />
-                            </div>                                                        
-                        </div>
+              <div className="row">
+                <div className="col-md-12">
+                  <label htmlFor="fullName">Họ tên</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="fullName"
+                    name="fullName"
+                    value={customerInfo.fullName}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="col-md-12">
+                  <label htmlFor="tableName">Bàn số</label>
+                  <select
+                    className="form-control"
+                    id="tableName"
+                    name="tableName"
+                    value={customerInfo.tableName}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                  </select>
+                </div>
+                <div className="col-md-12">
+                  <label htmlFor="phoneNumber">Điện thoại</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    value={customerInfo.phoneNumber}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="col-md-12">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    name="email"
+                    value={customerInfo.email}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+              </div>
 
               <h4 className="mb-3">Hình thức thanh toán</h4>
               <div className="d-block my-3">
                 <div className="custom-control custom-radio">
-                  <input id="httt-1" name="httt_ma" type="radio" className="custom-control-input" required="" value="1" />
-                  <label className="custom-control-label" htmlFor="httt-1">Tiền mặt</label>
+                  <input
+                    id="cash"
+                    name="paymentMethod"
+                    type="radio"
+                    className="custom-control-input"
+                    value="Tiền mặt"
+                    checked={paymentMethod === "Tiền mặt"}
+                    onChange={handlePaymentMethodChange}
+                    required
+                  />
+                  <label className="custom-control-label" htmlFor="cash">
+                    Tiền mặt
+                  </label>
                 </div>
                 <div className="custom-control custom-radio">
-                  <input id="httt-2" name="httt_ma" type="radio" className="custom-control-input" required="" value="2" />
-                  <label className="custom-control-label" htmlFor="httt-2">Chuyển khoản</label>
+                  <input
+                    id="bankTransfer"
+                    name="paymentMethod"
+                    type="radio"
+                    className="custom-control-input"
+                    value="Chuyển khoản"
+                    checked={paymentMethod === "Chuyển khoản"}
+                    onChange={handlePaymentMethodChange}
+                    required
+                  />
+                  <label className="custom-control-label" htmlFor="bankTransfer">
+                    Chuyển khoản
+                  </label>
                 </div>
               </div>
               <hr className="mb-4" />
+              {/* Phần tổng tiền và nút đặt hàng */}
               <h4 className="d-flex justify-content-between align-items-center mb-3">
                 <span className="text-muted">Tổng tiền</span>
                 <span className="badge badge-secondary badge-pill">${totalPrice}</span>
               </h4>
-              <button className="btn btn-primary btn-lg btn-block" type="submit" name="btnDatHang">Đặt hàng</button>
+              <button className="btn btn-primary btn-lg btn-block" type="submit" name="btnDatHang">
+                Đặt hàng
+              </button>
             </div>
           </div>
         </form>

@@ -4,8 +4,11 @@ import ModalEditProduct from "./ModalEditProduct";
 import ModalDeleteProduct from "./ModalDeleteProduct";
 import HeaderAdmin from "../Layout/HeaderAdmin";
 import { FaTrash, FaPencilAlt, FaSearch } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { saveCurrentPath } from "../../../actions/actions";
 
 const ProductManagement = () => {
+  const staticUrl = "http://localhost:8080/api/home/file";
   const [categories, setCategories] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -14,12 +17,15 @@ const ProductManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [foodsPerPage] = useState(10);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     fetchFoods();
-  }, []);
+    dispatch(saveCurrentPath(window.location.pathname));
+  }, [dispatch]);
 
   const fetchFoods = () => {
-    fetch("http://localhost:4000/category")
+    fetch("http://localhost:8080/api/home/category")
       .then((response) => response.json())
       .then((data) => {
         setCategories(data.data);
@@ -28,15 +34,89 @@ const ProductManagement = () => {
   };
 
   const handleAddFood = async (food) => {
-    // Your code for adding food
+    console.log(food);
+    const formData = new FormData();
+    formData.append("title", food.title);
+    formData.append("timeServe", 10);
+    formData.append("material", "About 30 minutes");
+    formData.append("detail", "About 30 minutes");
+    formData.append("price", food.price);
+    formData.append("file", food.image); // Thêm đối tượng File vào FormData
+    formData.append("category_name", food.category);
+    
+    try {
+        const accessToken = localStorage.getItem("accessToken");
+        const response = await fetch("http://localhost:8080/api/food/add", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+            body: formData,
+        });
+        // Xử lý response ở đây nếu cần
+        fetchFoods()
+    }catch (error) {
+      console.error("Error adding food:", error);
+      // Xử lý lỗi ở đây nếu cần
+    }
   };
 
   const handleUpdateFood = async (food) => {
-    // Your code for updating food
+    let file;
+    const formData = new FormData();
+    formData.append('id', food.id);
+    formData.append('title', food.title);
+    formData.append('price', food.price);
+    formData.append('material', "About 30 minutes");
+    formData.append('detail', "");
+    formData.append('timeServe', 10);
+    
+    formData.append('category_name', food.category);
+    
+
+    if (food.image instanceof File) {      
+      formData.append('file', food.image); // Thêm đối tượng File vào FormData
+    }else{
+      file = new File([""], food.image, { type: "image/jpeg" });
+      console.log(file);
+      formData.append('file', file); // Thêm đối tượng File vào FormData
+    }        
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await fetch(
+        `http://localhost:8080/api/food/update`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: formData
+        }
+      );
+      // Xử lý response ở đây nếu cần
+      fetchFoods()
+    } catch (error) {
+      console.error("Error updating food:", error);
+      // Xử lý lỗi ở đây nếu cần
+    }
   };
 
-  const handleDeleteFood = async (category) => {
-    // Your code for deleting food
+  const handleDeleteFood = async (foodId) => {
+    console.log(foodId)
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await fetch(`http://localhost:8080/api/food/delete/${foodId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      // Xử lý response ở đây nếu cần
+      fetchFoods()
+    } catch (error) {
+      console.error("Error deleting food:", error);
+      // Xử lý lỗi ở đây nếu cần
+    }
   };
 
   const handleEditButtonClick = (food) => {
@@ -152,7 +232,7 @@ const ProductManagement = () => {
                   <td>{food.id}</td>
                   <td>
                     <img
-                      src={require(`../../../assets/images/${food.image}`)}
+                      src={`${staticUrl}/food/${food.image}`}
                       alt={food.title}
                       style={{
                         width: "100px",
