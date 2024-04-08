@@ -15,7 +15,7 @@ const PageMenu = () => {
     dispatch(saveCurrentPath(window.location.pathname));
     setTimeout(() => {
       scrollToElement('scrollTarget');
-    }, 1000);
+    });
   }, []);
 
   const fetchCategories = async () => {

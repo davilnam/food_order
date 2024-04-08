@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { saveCurrentPath } from "../actions/actions";
 import { Link } from "react-router-dom";
-
+import { scrollToElement } from '../scrollUtils';
 const ThankYouPage = () => {
   const dispatch = useDispatch();
 
