@@ -1,11 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { saveCurrentPath } from "../actions/actions";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import "../styles/css/register.css";
-
+import { scrollToElement } from '../scrollUtils';
 const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(saveCurrentPath(window.location.pathname));
+    dispatch(saveCurrentPath(window.location.pathname));
+    setTimeout(() => {
+      scrollToElement('scrollTarget');
+    });
+  }, [dispatch]);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);

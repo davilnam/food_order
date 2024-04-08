@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../actions/actions"; // Import action addToCart
+import { addToCart, saveCurrentPath } from "../actions/actions";
 import { Link } from "react-router-dom";
+import { scrollToElement } from '../scrollUtils';
 
 const PageMenu = () => {
+  const staticUrl = "http://localhost:8080/api/home/file";
   const dispatch = useDispatch();
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(0); // Đặt selectedCategory mặc định là 0
 
   useEffect(() => {
     fetchCategories();
+    dispatch(saveCurrentPath(window.location.pathname));
+    setTimeout(() => {
+      scrollToElement('scrollTarget');
+    });
   }, []);
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:4000/category");
+      const response = await fetch("http://localhost:8080/api/home/category");
       const data = await response.json();
       setCategories(data.data);
     } catch (error) {
@@ -34,7 +40,7 @@ const PageMenu = () => {
   
 
   return (
-    <section className="ftco-section">
+    <section id="scrollTarget" className="ftco-section">
       <div className="container">
         <div className="ftco-search">
           <div className="row">
@@ -78,9 +84,11 @@ const PageMenu = () => {
                         >
                           <div className="menus d-sm-flex align-items-stretch fadeInUp">
                             <div
-                              className={`menu-img img ${foodIndex % 2 !== 0 ? "order-md-last" : ""}`}
+                              className={`menu-img img ${
+                                foodIndex % 2 !== 0 ? "order-md-last" : ""
+                              }`}
                               style={{
-                                backgroundImage: `url(${require(`../assets/images/${food.image}`)})`,
+                                backgroundImage: `url(${staticUrl}/food/${food.image})`,
                               }}
                             ></div>
                             <div className="text d-flex align-items-center productBody">
@@ -88,7 +96,9 @@ const PageMenu = () => {
                                 <div className="d-flex">
                                   <div className="one-half">
                                     <h3 className="productName">
-                                      <Link to={`/foodDetail/${food.id}`}>{food.title}</Link>
+                                      <Link to={`/foodDetail/${food.id}`}>
+                                        {food.title}
+                                      </Link>
                                     </h3>
                                   </div>
                                   <div className="one-forth">
@@ -100,7 +110,10 @@ const PageMenu = () => {
                                   <span>Gạo</span>, <span>Cà chua</span>
                                 </p>
                                 <p>
-                                  <button className="btn btn-primary addBtn" onClick={() => handleAddToCart(food)}>
+                                  <button
+                                    className="btn btn-primary addBtn"
+                                    onClick={() => handleAddToCart(food)}
+                                  >
                                     Thêm món
                                   </button>
                                 </p>

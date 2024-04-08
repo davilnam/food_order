@@ -8,8 +8,8 @@ import { BiSolidCategory } from "react-icons/bi";
 import { NavLink } from "react-router-dom";
 
 const SliderAdmin = () => {
-  let user = useSelector((state) => state.app.user);
-  console.log(user)
+  let user = useSelector((state) => state.app.user);    
+  user = {title: "nam", userId: 1}
   const isSidebarOpen = useSelector((state) => state.app.isSidebarOpen);
   const sliderClass = isSidebarOpen
     ? "sidebarAdmin pe-4 pb-3"
@@ -29,8 +29,8 @@ const SliderAdmin = () => {
             <div className="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
           </div>
           <div className="ms-3">
-            <h6 className="mb-0">Nam</h6>
-            <span>Admin</span>
+            <h6 className="mb-0">{user.title}</h6>
+            {/* <span>Admin</span> */}
           </div>
         </div>
         <div className="navbar-nav w-100" id="sidebar">
@@ -47,7 +47,7 @@ const SliderAdmin = () => {
             Dashboard
           </NavLink>
           <NavLink
-            to="/admin/managerOrder"
+            to="/admin/manager-order"
             className={({ isActive }) => {
               const activeClass = isActive ? "active" : "";
               return `nav-item nav-link ${activeClass}`;
@@ -59,7 +59,7 @@ const SliderAdmin = () => {
             Quản lý đơn hàng
           </NavLink>
           <NavLink
-            to="/admin/managerFood"
+            to="/admin/manager-food"
             className={({ isActive }) => {
               const activeClass = isActive ? "active" : "";
               return `nav-item nav-link ${activeClass}`;
@@ -71,7 +71,7 @@ const SliderAdmin = () => {
             Quản lý sản phẩm
           </NavLink>
           <NavLink
-            to="/admin/category"
+            to="/admin/manager-category"
             className={({ isActive }) => {
               const activeClass = isActive ? "active" : "";
               return `nav-item nav-link ${activeClass}`;
@@ -83,7 +83,7 @@ const SliderAdmin = () => {
             Quản lý danh mục
           </NavLink>
           <NavLink
-            to="/admin/managerAccount"
+            to="/admin/manager-account"
             className={({ isActive }) => {
               const activeClass = isActive ? "active" : "";
               return `nav-item nav-link ${activeClass}`;

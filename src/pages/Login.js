@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate  } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../actions/actions";
+import { loginSuccess, saveCurrentPath, clearCartItems, clearOrderItems } from "../actions/actions";
 import "../styles/css/login.css";
-
+import { scrollToElement } from '../scrollUtils';
 const Login = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(saveCurrentPath(window.location.pathname));
+    dispatch(saveCurrentPath(window.location.pathname));
+    setTimeout(() => {
+      scrollToElement('scrollTarget');
+    });
+  }, [dispatch]);
+
   const navigate = useNavigate(); // Sửa đổi tại đây
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -23,7 +32,7 @@ const Login = () => {
     console.log({email, password})
 
     try {
-      const response = await fetch("http://localhost:4000/login", {
+      const response = await fetch("http://localhost:8080/api/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,18 +47,28 @@ const Login = () => {
       }
 
       const data = await response.json();
-      let check = false;
-      if (data.desc === "[ADMIN]") {
-        check = true;
-      }       
+
+      let isAdmin = false;
+      let isCounter = false;
+      if (data.desc === "[SUPERADMIN]") {
+        isAdmin = true;
+      } else if(data.desc === "[ADMIN]"){
+        isCounter = true;
+      }
+
       // Cập nhật reducer và localStorage
-      dispatch(loginSuccess({title: data.title, check: check})); // Cập nhật thông tin người dùng
+      const user = {title: data.title, userId: data.id};
+      dispatch(loginSuccess({user: user, isAdmin: isAdmin, isCounter: isCounter})); // Cập nhật thông tin người dùng
+      dispatch(clearCartItems());
+      dispatch(clearOrderItems());
       localStorage.setItem("accessToken", data.data); // Lưu accessToken vào localStorage
 
       // Điều hướng người dùng đến trang phù hợp dựa vào desc
-      if (data.desc === "[ADMIN]") {
-        navigate("/admin");
-      } else {
+      if (data.desc === "[SUPERADMIN]") {
+        navigate("/admin/dashboard");
+      } else  if (data.desc === "[ADMIN]"){
+        navigate("/counter");
+      }else{        
         navigate("/");
       }
     } catch (error) {

@@ -1,15 +1,23 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleSidebar } from '../../../actions/actions';
+import { toggleSidebar, logout } from '../../../actions/actions';
 import default_avatar from '../../../assets/images/default_avatar.png'
 import { FaBars } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 
 const HeaderAdmin = () => {
     const dispatch = useDispatch();
-    let { user } = useSelector(state => state.app);    
+    const navigate = useNavigate();
+    let { user } = useSelector(state => state.app);      
+    user = {title: "nam", userId: 1}
 
     const handleOnclick = () => {
         dispatch(toggleSidebar());
+    }
+
+    const handleLogout = () => {
+        dispatch(logout())        
+        navigate('/'); // Điều hướng người dùng đến trang chính sau khi logout
     }
 
     return (
@@ -25,11 +33,11 @@ const HeaderAdmin = () => {
                     <a href="/profile" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                         <img className="rounded-circle me-lg-2" src={default_avatar} alt=""
                             style={{ width: "40px", height: "40px" }} />
-                        <span className="d-none d-lg-inline-flex">Nam</span>
+                        <span className="d-none d-lg-inline-flex">{user.title}</span>
                     </a>
                     <div className="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                        <a href="profile.html" className="dropdown-item">My Profile</a>
-                        <a href="home.html" className="dropdown-item">Log Out</a>
+                        <button className="dropdown-item">My Profile</button>
+                        <button className="dropdown-item" onClick={handleLogout}>Log Out</button>
                     </div>
                 </div>
             </div>

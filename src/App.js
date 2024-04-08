@@ -16,43 +16,52 @@ import PageContact from "./pages/PageContact";
 import PageMenu from "./pages/PageMenu";
 import FoodDetail from "./components/detail_food/FoodDetail";
 import Cart from "./components/cart/Cart";
+import ThankYouPage from "./pages/ThankYouPage";
 import Payment from "./components/payment/Payment";
+import OrderDetail from "./pages/Admin/order/OrderDetail"
+import Counter from "./pages/Counter/Counter";
 import NotFound from "./components/NotFound";
 import LayoutUser from "./pages/LayoutUser";
 
 const App = () => {
   // Lấy giá trị isLoggedIn và isAdmin từ reducer
-  let { isLoggedIn, isAdmin } = useSelector(state => state.app);
-  // isAdmin = true;
-  // isLoggedIn = true;
+  let { isLoggedIn, isAdmin, isCounter } = useSelector((state) => state.app);
+  isAdmin = true;
+  isLoggedIn = true;
 
   return (
     <Routes>
-      <Route path="/" element={<LayoutUser />}>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="about" element={<PageAbout />}></Route>
-        <Route path="blog" element={<PagePost />}></Route>
-        <Route path="contact" element={<PageContact />}></Route>
-        <Route path="menu" element={<PageMenu />}></Route>
-        <Route path="cart" element={<Cart />}></Route>
-        <Route path="payment" element={<Payment />}></Route>
+        <Route path="/" element={<LayoutUser />}>
+        <Route path="home-page" element={<Home />}></Route>
+        <Route path="about-page" element={<PageAbout />}></Route>
+        <Route path="blog-page" element={<PagePost />}></Route>
+        <Route path="contact-page" element={<PageContact />}></Route>
+        <Route path="menu-page" element={<PageMenu />}></Route>
+        <Route path="cart-detail-page" element={<Cart />}></Route>
+        <Route path="get-pay-page" element={<Payment />}></Route>
         {/* Sử dụng Route param để truyền id vào FoodDetail */}
-        <Route path="foodDetail/:id" element={<FoodDetail />}></Route>
-        <Route path="login" element={<Login />}></Route>
-        <Route path="register" element={<Register />}></Route>
+        <Route path="food-detail/:id" element={<FoodDetail />}></Route>
+        <Route path="login-page" element={<Login />}></Route>
+        <Route path="thankYou" element={<ThankYouPage />}></Route>
+        <Route path="register-page" element={<Register />}></Route>
         {/* Thêm một Route cuối cùng với path="*" để xử lý các trang không hợp lệ */}
         <Route path="*" element={<Navigate to="/not-found" />} />
       </Route>
       {isLoggedIn && isAdmin && (
-        <Route path="/admin/*" element={<Layout />}>
+        <Route path="/admin" element={<Layout />}>
           <Route path="dashboard" element={<DashBoard />}></Route>
-          <Route path="managerOrder" element={<OrderManagement />}></Route>
-          <Route path="managerAccount" element={<AccountManagement />}></Route>
-          <Route path="category" element={<CategoryManagement />}></Route>
-          <Route path="managerFood" element={<ProductManagement />}></Route>
+          <Route path="manager-order" element={<OrderManagement />}></Route>
+          <Route path="manager-account" element={<AccountManagement />}></Route>
+          <Route path="manager-category" element={<CategoryManagement />}></Route>
+          <Route path="manager-food" element={<ProductManagement />}></Route>
+          <Route path="order/get-detail/:orderId" element={<OrderDetail />}></Route>
           {/* Thêm một Route cuối cùng với path="*" để xử lý các trang không hợp lệ */}
           <Route path="*" element={<Navigate to="/not-found" />} />
         </Route>
+      )}
+      {isLoggedIn && isCounter && (
+      <Route path="/counter" element={<Counter/>}>        
+      </Route>
       )}
       {/* Trang not found */}
       <Route path="not-found" element={<NotFound />} />
