@@ -5,15 +5,19 @@ import { useNavigate } from "react-router-dom";
 
 const Payment = () => {
   const cartItemsOrder = useSelector((state) => state.app.cartItemsOrder);
+  const user = useSelector((state) => state.app.user);
+  const listOrderId = useSelector((state) => state.app.listOrderId);
   const [customerInfo, setCustomerInfo] = useState({
     fullName: "",
-    tableName: "",
     phoneNumber: "",
     email: "",
   });
   const [paymentMethod, setPaymentMethod] = useState("");
 
-  const totalPrice = cartItemsOrder.reduce((total, item) => total + item.price * item.quantity, 0);
+  const totalPrice = cartItemsOrder.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,14 +35,39 @@ const Payment = () => {
 
   const navigate = useNavigate();
 
-  
+  const fetchPayment = async (listOrderId) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await fetch("http://localhost:4000/addOrder", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          orderIDList: listOrderId,
+          totalPrice: totalPrice,
+          custommerName: customerInfo.fullName,
+          customerEmail: customerInfo.email,
+          customerPhoneNumber: customerInfo.phoneNumber,
+          method: paymentMethod
+        }),
+      });
+      const data = await response.json();      
+      if (data.success) {
+        console.log("ok");
+      } else {
+        throw new Error("Failed to add order");
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Xử lý logic khi người dùng ấn nút Đặt hàng
-    console.log("Thông tin khách hàng:", customerInfo);
-    console.log("Phương thức thanh toán:", paymentMethod);
-    console.log("Giỏ hàng:", cartItemsOrder);
     // gọi api thanh toán thành công thì chuyên qua trang cảm ơn và xóa hết sản phẩm trong giỏ hàng
+    fetchPayment(listOrderId);
     dispatch(clearOrderItems());
     navigate("/thankYou");
   };
@@ -52,23 +81,35 @@ const Payment = () => {
           <div className="py-5 text-center">
             <i className="fa fa-credit-card fa-4x" aria-hidden="true"></i>
             <h2>Thanh toán</h2>
-            <p className="lead">Vui lòng kiểm tra thông tin Khách hàng, thông tin Giỏ hàng trước khi Đặt hàng.</p>
+            <p className="lead">
+              Vui lòng kiểm tra thông tin Khách hàng, thông tin Giỏ hàng trước
+              khi Đặt hàng.
+            </p>
           </div>
 
           <div className="row">
             <div className="col-md-4 order-md-2 mb-4">
               <h4 className="d-flex justify-content-between align-items-center mb-3">
                 <span className="text-muted">Giỏ hàng</span>
-                <span className="badge badge-secondary badge-pill">{cartItemsOrder.length}</span>
+                <span className="badge badge-secondary badge-pill">
+                  {cartItemsOrder.length}
+                </span>
               </h4>
               <ul className="list-group mb-3">
                 {cartItemsOrder.map((item) => (
-                  <li key={item.id} className="list-group-item d-flex justify-content-between lh-condensed">
+                  <li
+                    key={item.id}
+                    className="list-group-item d-flex justify-content-between lh-condensed"
+                  >
                     <div>
                       <h6 className="my-0">{item.title}</h6>
-                      <small className="text-muted">Số lượng: {item.quantity}</small>
+                      <small className="text-muted">
+                        Số lượng: {item.quantity}
+                      </small>
                     </div>
-                    <span className="text-muted">${item.price * item.quantity}</span>
+                    <span className="text-muted">
+                      ${item.price * item.quantity}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -90,21 +131,7 @@ const Payment = () => {
                 </div>
                 <div className="col-md-12">
                   <label htmlFor="tableName">Bàn số</label>
-                  <select
-                    className="form-control"
-                    id="tableName"
-                    name="tableName"
-                    value={customerInfo.tableName}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                  </select>
+                  <div>{user.title}</div>
                 </div>
                 <div className="col-md-12">
                   <label htmlFor="phoneNumber">Điện thoại</label>
@@ -160,7 +187,10 @@ const Payment = () => {
                     onChange={handlePaymentMethodChange}
                     required
                   />
-                  <label className="custom-control-label" htmlFor="bankTransfer">
+                  <label
+                    className="custom-control-label"
+                    htmlFor="bankTransfer"
+                  >
                     Chuyển khoản
                   </label>
                 </div>
@@ -169,9 +199,15 @@ const Payment = () => {
               {/* Phần tổng tiền và nút đặt hàng */}
               <h4 className="d-flex justify-content-between align-items-center mb-3">
                 <span className="text-muted">Tổng tiền</span>
-                <span className="badge badge-secondary badge-pill">${totalPrice}</span>
+                <span className="badge badge-secondary badge-pill">
+                  ${totalPrice}
+                </span>
               </h4>
-              <button className="btn btn-primary btn-lg btn-block" type="submit" name="btnDatHang">
+              <button
+                className="btn btn-primary btn-lg btn-block"
+                type="submit"
+                name="btnDatHang"
+              >
                 Đặt hàng
               </button>
             </div>

@@ -7,7 +7,8 @@ import {
   UPDATE_CART_ITEM_QUANTITY,
   CLEAR_CART_ITEMS,
   ORDER_ITEMS,
-  CLEAR_ORDER_ITEMS
+  CLEAR_ORDER_ITEMS,
+  ADD_ORDER_ID
 } from "./actionTypes";
 
 export const toggleSidebar = () => ({
@@ -58,3 +59,10 @@ export const orderItems = () => ({
 export const clearOrderItems = () => ({
   type: CLEAR_ORDER_ITEMS
 });
+
+export const addOrderId = (orderId) => ({
+  type: ADD_ORDER_ID,
+  payload: {
+    orderId: orderId
+  }
+})

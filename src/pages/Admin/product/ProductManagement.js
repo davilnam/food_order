@@ -58,40 +58,41 @@ const ProductManagement = () => {
   };
 
   const handleUpdateFood = async (food) => {
-    let file;
-    const formData = new FormData();
-    formData.append('title', food.title);
-    formData.append('timeShip', "About 30 minutes");
-    formData.append('price', food.price);
-    formData.append('category_name', food.category);
-    formData.append('id', food.id);
+    console.log(food);
+    // let file;
+    // const formData = new FormData();
+    // formData.append('title', food.title);
+    // formData.append('timeShip', "About 30 minutes");
+    // formData.append('price', food.price);
+    // formData.append('category_name', food.category);
+    // formData.append('id', food.id);
 
-    if (food.image instanceof File) {      
-      formData.append('file', food.image); // Thêm đối tượng File vào FormData
-    }else{
-      file = new File([""], food.image, { type: "image/jpeg" });
-      console.log(file);
-      formData.append('file', file); // Thêm đối tượng File vào FormData
-    }        
-    try {
-      const accessToken = localStorage.getItem("accessToken");
-      const response = await fetch(
-        `http://localhost:4000/category/${food.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: formData
-        }
-      );
-      // Xử lý response ở đây nếu cần
-      fetchFoods()
-    } catch (error) {
-      console.error("Error updating food:", error);
-      // Xử lý lỗi ở đây nếu cần
-    }
+    // if (food.image instanceof File) {      
+    //   formData.append('file', food.image); // Thêm đối tượng File vào FormData
+    // }else{
+    //   file = new File([""], food.image, { type: "image/jpeg" });
+    //   console.log(file);
+    //   formData.append('file', file); // Thêm đối tượng File vào FormData
+    // }        
+    // try {
+    //   const accessToken = localStorage.getItem("accessToken");
+    //   const response = await fetch(
+    //     `http://localhost:4000/category/${food.id}`,
+    //     {
+    //       method: "PUT",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${accessToken}`,
+    //       },
+    //       body: formData
+    //     }
+    //   );
+    //   // Xử lý response ở đây nếu cần
+    //   fetchFoods()
+    // } catch (error) {
+    //   console.error("Error updating food:", error);
+    //   // Xử lý lỗi ở đây nếu cần
+    // }
   };
 
   const handleDeleteFood = async (foodId) => {

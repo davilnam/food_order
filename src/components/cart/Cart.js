@@ -5,22 +5,21 @@ import {
   saveCurrentPath,
   updateCartItemQuantity,
   orderItems,
+  addOrderId
 } from "../../actions/actions";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.app.cartItems);
-  const user = useSelector((state) => state.app.user);
+  let user = useSelector((state) => state.app.user);      
   const cartItemsOrder = useSelector((state) => state.app.cartItemsOrder);
-  console.log(cartItems);
-  console.log(cartItemsOrder);
+  
 
   const [itemQuantitiesCart, setItemQuantitiesCart] = useState({});
   const [itemQuantitiesOrder, setItemQuantitiesOrder] = useState({});
   const [totalPriceCart, setTotalPriceCart] = useState(0);
-  const [totalPriceOrder, setTotalPriceOrder] = useState(0);
-
+  const [totalPriceOrder, setTotalPriceOrder] = useState(0);  
   useEffect(() => {
     const updatedItemQuantitiesCart = cartItems.reduce((quantities, item) => {
       quantities[item.id] = item.quantity;
@@ -77,7 +76,7 @@ const Cart = () => {
     dispatch(removeFromCart(id));
   };
 
-  const fetchOrders = async (cartItems) => {
+  const fetchOrders = async (cartItems) => {    
     const reducedArray = cartItems.map(item => {
       return {
         foodID: item.id,
@@ -86,25 +85,29 @@ const Cart = () => {
     });
     try {
       const token = localStorage.getItem("accessToken");
-      const response = await fetch("http://localhost:4000/api/order", {
+      const response = await fetch("http://localhost:4000/addOrder", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ userId: user.userId, orderItemDTOList: reducedArray })
-      });
-      if (!response.ok) {
-        throw new Error("Failed to add category");
-      }      
+      });      
+      const data = await response.json();
+      console.log(data);
+      if (data.success) {        
+        dispatch(addOrderId(data.id));        
+      } else {
+        throw new Error("Failed to add order");
+      }        
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
   };
 
   const handleOrder = () => {
-    fetchOrders(cartItems);
-    dispatch(orderItems());
+    fetchOrders(cartItems);    
+    dispatch(orderItems());    
   };
 
   return (
