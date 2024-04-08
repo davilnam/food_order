@@ -22,7 +22,7 @@ const AccountManagement = () => {
   // Hàm để gửi yêu cầu GET đến API để lấy danh sách tài khoản
   const fetchAccounts = async () => {
     try {
-      const response = await fetch("http://localhost:4000/account");
+      const response = await fetch("http://localhost:8080/api/user/get-all");
       const data = await response.json();
       if (data.success) {
         setAccounts(data.data);
@@ -142,11 +142,11 @@ const AccountManagement = () => {
           <table className="table">
             <thead>
               <tr>
-                <th>#</th>
+                <th>STT</th>
                 <th>Email</th>
                 <th>Name</th>
                 <th>Role</th>
-                <th>Phone</th>
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>

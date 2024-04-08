@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { saveCurrentPath } from "../actions/actions";
-
+import { scrollToElement } from '../scrollUtils';
 const GoogleMapsEmbed = () => {
   return (
     <div className="google-map">
@@ -23,10 +23,14 @@ const PageContact = () => {
 
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
+    dispatch(saveCurrentPath(window.location.pathname));
+    setTimeout(() => {
+      scrollToElement('scrollTarget');
+    });
   }, [dispatch]);
   return (
     <div>
-      <section className="ftco-section ftco-no-pt ftco-no-pb contact-section">
+      <section id="scrollTarget" className="ftco-section ftco-no-pt ftco-no-pb contact-section">
         <div className="container">
           <div className="row d-flex align-items-stretch no-gutters">
             <div className="col-md-6 pt-5 px-2 pb-2 p-md-5 order-md-last">

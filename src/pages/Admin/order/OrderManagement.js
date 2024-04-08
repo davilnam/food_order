@@ -19,7 +19,13 @@ const OrderManagement = () => {
   // Hàm để gửi yêu cầu GET đến API để lấy danh sách đơn hàng
   const fetchOrders = async () => {
     try {
-      const response = await fetch("http://localhost:4000/order");
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await fetch(`http://localhost:8080/api/order/get-all`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       const data = await response.json();
       setOrders(data.data); // Cập nhật danh sách đơn hàng từ dữ liệu trả về
     } catch (error) {
@@ -68,35 +74,34 @@ const OrderManagement = () => {
           <table className="table">
             <thead>
               <tr>
-                <th>#</th>
-                <th>Tên tài khoản</th>
+                <th>STT</th>
+                <th>Vị trí bàn</th>
+                <th>Tên khách hàng</th>
                 <th>Ngày đặt</th>
                 <th>SĐT (tài khoản)</th>
                 <th>Thành tiền</th>
-                <th>Trạng Thái</th>
-                <th>Cập nhật TT</th>
+                <th>Trạng thái phục vụ</th>
+                <th>Trạng thái thanh toán</th>
                 <th>Chi tiết</th>
               </tr>
             </thead>
             <tbody>
               {currentOrders.map((order, index) => (
                 <tr key={index}>
-                  <td>{order.id}</td>
+                  <td>{index + 1}</td>
                   <td>{order.userName}</td>
+                  <td>{order.cusName}</td>
                   <td>{order.time}</td>
                   <td>{order.customer_phone_number}</td>
                   <td>{order.totalPrice}</td>
-                  <td>{order.status ? "Đã xử lý" : "Chưa xử lý"}</td>
+                  <td>{order.status ? "Đã phục vụ" : "Chưa phục vụ"}</td>
                   <td>{order.is_pay ? "Đã thanh toán" : "Chưa thanh toán"}</td>
-                  <td>
-                    <Link
-                      to={`/admin/get-detail/${order.id}`}
+                  <td><Link
+                      to={`/admin/order/get-detail/${order.id}`}
                       className="btn btn-secondary"
                     >
                       Chi tiết
-                    </Link>
-                  </td>
-                  {/* Bổ sung liên kết đến trang chi tiết đơn hàng */}
+                    </Link></td> {/* Bổ sung liên kết đến trang chi tiết đơn hàng */}
                 </tr>
               ))}
             </tbody>

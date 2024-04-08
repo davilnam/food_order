@@ -8,16 +8,20 @@ import image3 from "../assets/images/image_3.jpg";
 import image4 from "../assets/images/image_4.jpg";
 import image5 from "../assets/images/image_5.jpg";
 import image6 from "../assets/images/image_6.jpg";
-
+import { scrollToElement } from '../scrollUtils';
 const PagePost = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
+    dispatch(saveCurrentPath(window.location.pathname));
+    setTimeout(() => {
+      scrollToElement('scrollTarget');
+    });
   }, [dispatch]);
   return (
     <>
-      <section className="ftco-section bg-light">
+      <section id="scrollTarget" className="ftco-section bg-light">
         <div className="container">
           <div className="row justify-content-center mb-5">
             <div className="col-md-7 text-center heading-section">

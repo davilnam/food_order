@@ -24,7 +24,7 @@ const Header = () => {
     dispatch(logout());
     dispatch(clearCartItems());
     dispatch(clearOrderItems());
-    navigate("/"); 
+    navigate("/login-page"); 
   };
 
   return (
@@ -91,7 +91,7 @@ const Header = () => {
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
                 <NavLink
-                  to="/"
+                  to="/home-page"
                   className={({ isActive }) => {
                     const activeClass = isActive ? "activeHome" : "";
                     return `nav-link ${activeClass}`;
@@ -102,7 +102,7 @@ const Header = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  to="/about"
+                  to="/about-page"
                   className={({ isActive }) => {
                     const activeClass = isActive ? "activeHome" : "";
                     return `nav-link ${activeClass}`;
@@ -113,7 +113,7 @@ const Header = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  to="/menu"
+                  to="/menu-page"
                   className={({ isActive }) => {
                     const activeClass = isActive ? "activeHome" : "";
                     return `nav-link ${activeClass}`;
@@ -124,7 +124,7 @@ const Header = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  to="/blog"
+                  to="/blog-page"
                   className={({ isActive }) => {
                     const activeClass = isActive ? "activeHome" : "";
                     return `nav-link ${activeClass}`;
@@ -135,7 +135,7 @@ const Header = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  to="/contact"
+                  to="/contact-page"
                   className={({ isActive }) => {
                     const activeClass = isActive ? "activeHome" : "";
                     return `nav-link ${activeClass}`;
@@ -156,7 +156,7 @@ const Header = () => {
                   </button>
                 </li>
                 <li className="nav-item">
-                  <NavLink to="/cart" className="nav-link">
+                  <NavLink to="/cart-detail-page" className="nav-link">
                     <div
                       className="cart-icon"
                       style={{
@@ -178,12 +178,12 @@ const Header = () => {
             ) : (
               <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
-                  <NavLink to="/login" className="nav-link">
+                  <NavLink to="/login-page" className="nav-link">
                     Đăng nhập
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink to="/cart" className="nav-link">
+                  <NavLink to="/cart-detail-page" className="nav-link">
                     <div
                       className="cart-icon"
                       style={{

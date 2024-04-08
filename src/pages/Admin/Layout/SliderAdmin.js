@@ -47,7 +47,7 @@ const SliderAdmin = () => {
             Dashboard
           </NavLink>
           <NavLink
-            to="/admin/managerOrder"
+            to="/admin/manager-order"
             className={({ isActive }) => {
               const activeClass = isActive ? "active" : "";
               return `nav-item nav-link ${activeClass}`;
@@ -59,7 +59,7 @@ const SliderAdmin = () => {
             Quản lý đơn hàng
           </NavLink>
           <NavLink
-            to="/admin/managerFood"
+            to="/admin/manager-food"
             className={({ isActive }) => {
               const activeClass = isActive ? "active" : "";
               return `nav-item nav-link ${activeClass}`;
@@ -71,7 +71,7 @@ const SliderAdmin = () => {
             Quản lý sản phẩm
           </NavLink>
           <NavLink
-            to="/admin/category"
+            to="/admin/manager-category"
             className={({ isActive }) => {
               const activeClass = isActive ? "active" : "";
               return `nav-item nav-link ${activeClass}`;
@@ -83,7 +83,7 @@ const SliderAdmin = () => {
             Quản lý danh mục
           </NavLink>
           <NavLink
-            to="/admin/managerAccount"
+            to="/admin/manager-account"
             className={({ isActive }) => {
               const activeClass = isActive ? "active" : "";
               return `nav-item nav-link ${activeClass}`;
