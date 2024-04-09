@@ -24,6 +24,7 @@ const PageContact = () => {
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
     dispatch(saveCurrentPath(window.location.pathname));
+    document.title = 'Liên hệ với chúng tôi';
     setTimeout(() => {
       scrollToElement('scrollTarget');
     });

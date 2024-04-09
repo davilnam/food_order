@@ -12,12 +12,19 @@ const OrderDetail = () => {
   useEffect(() => {
     // Gọi API để lấy chi tiết đơn hàng dựa trên orderId
     fetchOrderDetail(orderId);
+    document.title = "Chi tiết đơn đặt";
   }, [orderId]);
-
+  const formatPriceToVND = (price) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(price);
+  };
   const fetchOrderDetail = async (orderId) => {
     try {
       const accessToken = localStorage.getItem("accessToken");
       const url = app_api_url + `/api/order/get-detail/${orderId}`;
+      console.log(url);
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -25,6 +32,7 @@ const OrderDetail = () => {
         },
       });
       const data = await response.json();
+      console.log(data);
       if (data.success) {
         setOrderDetail(data.data);
       } else {
@@ -59,7 +67,7 @@ const OrderDetail = () => {
                 </tr>
                 <tr>
                   <td><strong>Giá trị hóa đơn:</strong></td>
-                  <td>${orderDetail.totalPrice.toFixed(2)}</td>
+                  <td>{formatPriceToVND(orderDetail.totalPrice)}</td>
                 </tr>
                 <tr>
                   <td><strong>Trạng thái:</strong></td>

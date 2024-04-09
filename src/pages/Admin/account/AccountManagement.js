@@ -18,14 +18,21 @@ const AccountManagement = () => {
 
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
+    document.title = "Quản trị tài khoản hệ thống";
     fetchAccounts(); // Gọi hàm fetchAccounts khi component được tải
   }, [dispatch]);
 
   // Hàm để gửi yêu cầu GET đến API để lấy danh sách tài khoản
   const fetchAccounts = async () => {
     try {
+      const accessToken = localStorage.getItem("accessToken");
       const url = app_api_url + "/api/user/get-all";
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       const data = await response.json();
       if (data.success) {
         setAccounts(data.data);

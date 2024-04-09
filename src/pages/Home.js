@@ -12,6 +12,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
+    document.title = 'Trang chủ';
     setTimeout(() => {
       scrollToElement('scrollTarget');
     });

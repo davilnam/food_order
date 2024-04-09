@@ -19,6 +19,7 @@ const CategoryManagement = () => {
   const app_api_url = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
+    document.title = "Quản trị danh mục sản phẩm";
     fetchCategories();
     dispatch(saveCurrentPath(window.location.pathname));
   }, [dispatch]);

@@ -51,6 +51,8 @@ const ModalAddProduct = ({ isOpen, toggle, listCategory, handleSaveFood }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [food, setFood] = useState({
     title: "",
+    detail: "",
+    material: "",
     price: 0,
     image: "",
     category: "",
@@ -103,6 +105,36 @@ const ModalAddProduct = ({ isOpen, toggle, listCategory, handleSaveFood }) => {
             name="productName"
             id="productName"
             onChange={(event) => handleOnChangeInput(event, "title")}
+            required
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label for="productDetail">Chi tiết mô tả</Label>
+          <Input
+            type="text"
+            name="productDetail"
+            id="productDetail"
+            onChange={(event) => handleOnChangeInput(event, "detail")}
+            required
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label for="productMaterial">Chi tiết nguyên liệu</Label>
+          <Input
+            type="text"
+            name="productMaterial"
+            id="productMaterial"
+            onChange={(event) => handleOnChangeInput(event, "material")}
+            required
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label for="productTimeServe">Thời gian phục vụ</Label>
+          <Input
+            type="number"
+            name="productTimeServe"
+            id="productTimeServe"
+            onChange={(event) => handleOnChangeInput(event, "timeServe")}
             required
           />
         </FormGroup>

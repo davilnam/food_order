@@ -11,6 +11,7 @@ const Login = () => {
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
     dispatch(saveCurrentPath(window.location.pathname));
+    document.title = 'Đăng nhập hệ thống';
     setTimeout(() => {
       scrollToElement('scrollTarget');
     });
@@ -89,7 +90,7 @@ const Login = () => {
                 style={{ borderRadius: "1rem" }}
               >
                 <form onSubmit={handleSubmit}>
-                  <div className="card-body p-5 text-center">
+                  <div id="scrollTarget" className="card-body p-5 text-center">
                     <h3 className="mb-5">Đăng nhập</h3>
 
                     <div className="form-outline mb-4">

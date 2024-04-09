@@ -8,6 +8,7 @@ const ThankYouPage = () => {
 
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
+    document.title = 'Thanh you for comming!';
   }, [dispatch]);
   return (
     <section className="ftco-section">

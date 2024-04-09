@@ -8,6 +8,7 @@ import {
   addOrderId
 } from "../../actions/actions";
 import { Link } from "react-router-dom";
+import { scrollToElement } from '../../scrollUtils';
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -24,9 +25,10 @@ const Cart = () => {
     const updatedItemQuantitiesCart = cartItems.reduce((quantities, item) => {
       quantities[item.id] = item.quantity;
       return quantities;
+      
     }, {});
     setItemQuantitiesCart(updatedItemQuantitiesCart);
-
+    document.title = 'Giỏ hàng';
     const updatedItemQuantitiesOrder = cartItemsOrder.reduce(
       (quantities, item) => {
         quantities[item.id] = item.quantity;
@@ -49,6 +51,9 @@ const Cart = () => {
     setTotalPriceOrder(updatedTotalPriceOrder);
 
     dispatch(saveCurrentPath(window.location.pathname));
+    setTimeout(() => {
+      scrollToElement('scrollTarget');
+    });
   }, [cartItems, cartItemsOrder, dispatch]);
 
   const totalQuantityCart = Object.values(itemQuantitiesCart).reduce(
@@ -123,9 +128,9 @@ const Cart = () => {
 
   return (
     <div className="container">
-      <div className="row">
+      <div id="scrollTarget" className="row">
         {cartItemsOrder && cartItemsOrder.length > 0 ? (
-          <div>
+          <div >
             <h2>Danh sách các món đã đặt hàng</h2>
             <table className="table">
               <thead>
@@ -162,7 +167,7 @@ const Cart = () => {
             </div>
           </div>
         ) : (
-          <div className="mt-3">Không có món hàng nào được đặt.</div>
+          <div className="mt-3">Không có món nào đã được đặt.</div>
         )}
       </div>
 

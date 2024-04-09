@@ -4,7 +4,6 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button, FormGroup, Label, I
 // Component ImageInput để xử lý chọn hình ảnh
 const ImageInput = ({ onChange }) => {
     const [imageSrc, setImageSrc] = useState("");
-
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -31,11 +30,11 @@ const ImageInput = ({ onChange }) => {
 const ModalEditProduct = ({ isOpen, toggle, food, listCategory, handleUpdateFood }) => {    
     const [newFood, setNewFood] = useState(food);
     const [imageSrc, setImageSrc] = useState("");
-
+    const staticUrl = process.env.REACT_APP_API_URL_IMAGE;
     useEffect(() => {
         // Kiểm tra nếu food có ảnh
         if (food.image) {
-            setImageSrc(`/assets/images/${food.image}`);
+            setImageSrc(`${staticUrl}/${food.image}`);
         }
     }, [food]);
 
@@ -68,8 +67,20 @@ const ModalEditProduct = ({ isOpen, toggle, food, listCategory, handleUpdateFood
             <ModalHeader toggle={toggle}>Sửa sản phẩm</ModalHeader>
             <ModalBody>
                 <FormGroup>
-                    <Label for="productNameEdit">Tên Sản Phẩm</Label>
+                    <Label for="productNameEdit">Tên sản phẩm</Label>
                     <Input type="text" name="productNameEdit" id="productNameEdit" value={newFood.title} onChange={(event) => handleInputChange(event, "title")}  required />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="productDetailEdit">Chi tiết sản hẩm</Label>
+                    <Input type="text" name="productDetailEdit" id="productDetailEdit" value={newFood.detail} onChange={(event) => handleInputChange(event, "detail")}  required />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="productMaterialEdit">Chi tiết nguyên liệu</Label>
+                    <Input type="text" name="productMaterialEdit" id="productMaterialEdit" value={newFood.detail} onChange={(event) => handleInputChange(event, "material")}  required />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="productTimeServe">Thời gian phục vụ</Label>
+                    <Input type="number" name="productTimeServe" id="productTimeServe" onChange={(event) => handleInputChange(event, "timeServe")} value={newFood.timeServe} required />
                 </FormGroup>
                 <FormGroup>
                     <Label for="productPriceEdit">Giá Bán</Label>

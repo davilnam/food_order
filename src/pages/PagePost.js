@@ -14,7 +14,7 @@ const PagePost = () => {
 
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
-    dispatch(saveCurrentPath(window.location.pathname));
+    document.title = 'Blog';
     setTimeout(() => {
       scrollToElement('scrollTarget');
     });

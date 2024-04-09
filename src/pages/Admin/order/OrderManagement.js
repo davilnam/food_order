@@ -15,6 +15,7 @@ const OrderManagement = () => {
 
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
+    document.title = "Quản trị danh sách đơn đặt";
     fetchOrders(); // Gọi hàm fetchOrders khi component được tải
   }, [dispatch]);
 
@@ -100,7 +101,7 @@ const OrderManagement = () => {
                   <td>{order.status ? "Đã phục vụ" : "Chưa phục vụ"}</td>
                   <td>{order.is_pay ? "Đã thanh toán" : "Chưa thanh toán"}</td>
                   <td><Link
-                      to={`/admin/order/get-detail//${order.id}`}
+                      to={`/admin/order/get-detail/${order.id}`}
                       className="btn btn-secondary"
                     >
                       Chi tiết

@@ -14,6 +14,7 @@ const PageMenu = () => {
   useEffect(() => {
     fetchCategories();
     dispatch(saveCurrentPath(window.location.pathname));
+    document.title = 'Thực đơn nhà hàng';
     setTimeout(() => {
       scrollToElement("scrollTarget");
     });

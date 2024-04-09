@@ -20,10 +20,10 @@ const ProductManagement = () => {
 
   const dispatch = useDispatch();
   const app_api_url = process.env.REACT_APP_API_URL;
-
   useEffect(() => {
     fetchFoods();
     dispatch(saveCurrentPath(window.location.pathname));
+    document.title = "Quản trị danh sách sản phẩm";
   }, [dispatch]);
 
   const fetchFoods = () => {
@@ -40,9 +40,9 @@ const ProductManagement = () => {
     console.log(food);
     const formData = new FormData();
     formData.append("title", food.title);
-    formData.append("timeServe", 10);
-    formData.append("material", "About 30 minutes");
-    formData.append("detail", "About 30 minutes");
+    formData.append("timeServe", food.timeServe);
+    formData.append("material", food.material);
+    formData.append("detail", food.detail);
     formData.append("price", food.price);
     formData.append("file", food.image); // Thêm đối tượng File vào FormData
     formData.append("category_name", food.category);
@@ -70,9 +70,9 @@ const ProductManagement = () => {
     formData.append("id", food.id);
     formData.append("title", food.title);
     formData.append("price", food.price);
-    formData.append("material", "About 30 minutes");
-    formData.append("detail", "");
-    formData.append("timeServe", 10);
+    formData.append("material", food.material);
+    formData.append("detail", food.detail);
+    formData.append("timeServe", food.timeServe);
 
     formData.append("category_name", food.category);
 
