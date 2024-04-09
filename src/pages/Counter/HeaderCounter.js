@@ -2,14 +2,17 @@ import React from "react";
 import { Navbar, NavbarBrand, Nav, NavItem, NavLink, Button } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../actions/actions";
+import { useNavigate } from 'react-router-dom';
 
 const HeaderCounter = () => {
   const dispatch = useDispatch();
   let { user } = useSelector((state) => state.app);
   // user = {title: "nam", userId: 2} 
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logout());
+    navigate('/home-page'); // Điều hướng người dùng đến trang chính sau khi logout
   };
 
   return (

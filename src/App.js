@@ -26,8 +26,8 @@ import LayoutUser from "./pages/LayoutUser";
 const App = () => {
   // Lấy giá trị isLoggedIn và isAdmin từ reducer
   let { isLoggedIn, isAdmin, isCounter } = useSelector((state) => state.app);
-  isAdmin = true;
-  isLoggedIn = true;
+  // isAdmin = true;
+  // isLoggedIn = true;
 
   return (
     <Routes>

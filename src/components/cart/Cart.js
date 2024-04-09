@@ -177,7 +177,7 @@ const Cart = () => {
               <tr key={item.id}>
                 <td>
                   <img
-                    src={require(`${staticUrl}/${item.image}`)}
+                    src={`${staticUrl}/${item.image}`}
                     alt={item.name}
                     className="img-fluid"
                     style={{ maxWidth: "100px" }}
