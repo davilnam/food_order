@@ -5,23 +5,21 @@ import {
   saveCurrentPath,
   updateCartItemQuantity,
   orderItems,
+  addOrderId
 } from "../../actions/actions";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
-  const staticUrl = "http://localhost:8080/api/home/file";
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.app.cartItems);
-  const user = useSelector((state) => state.app.user);
+  let user = useSelector((state) => state.app.user);      
   const cartItemsOrder = useSelector((state) => state.app.cartItemsOrder);
-  console.log(cartItems);
-  console.log(cartItemsOrder);
+  
 
   const [itemQuantitiesCart, setItemQuantitiesCart] = useState({});
   const [itemQuantitiesOrder, setItemQuantitiesOrder] = useState({});
   const [totalPriceCart, setTotalPriceCart] = useState(0);
-  const [totalPriceOrder, setTotalPriceOrder] = useState(0);
-
+  const [totalPriceOrder, setTotalPriceOrder] = useState(0);  
   useEffect(() => {
     const updatedItemQuantitiesCart = cartItems.reduce((quantities, item) => {
       quantities[item.id] = item.quantity;
@@ -78,7 +76,7 @@ const Cart = () => {
     dispatch(removeFromCart(id));
   };
 
-  const fetchOrders = async (cartItems) => {
+  const fetchOrders = async (cartItems) => {    
     const reducedArray = cartItems.map(item => {
       return {
         foodID: item.id,
@@ -87,25 +85,29 @@ const Cart = () => {
     });
     try {
       const token = localStorage.getItem("accessToken");
-      const response = await fetch("http://localhost:8080/api/order/add", {
+      const response = await fetch("http://localhost:4000/addOrder", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ userId: user.userId, orderItemDTOList: reducedArray })
-      });
-      if (!response.ok) {
-        throw new Error("Failed to add category");
-      }
+      });      
+      const data = await response.json();
+      console.log(data);
+      if (data.success) {        
+        dispatch(addOrderId(data.id));        
+      } else {
+        throw new Error("Failed to add order");
+      }        
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
   };
 
   const handleOrder = () => {
-    fetchOrders(cartItems);
-    dispatch(orderItems());
+    fetchOrders(cartItems);    
+    dispatch(orderItems());    
   };
 
   return (
@@ -129,7 +131,7 @@ const Cart = () => {
                   <tr key={item.id}>
                     <td>
                       <img
-                        src={`${staticUrl}/food/${item.image}`}
+                        src={require(`../../assets/images/${item.image}`)}
                         alt={item.title}
                         className="img-fluid"
                         style={{ maxWidth: "100px" }}
@@ -144,8 +146,8 @@ const Cart = () => {
               </tbody>
             </table>
             <div className="d-flex justify-content-between">
-              <p>Số món đã đặt: {totalQuantityOrder}</p>
-              <p>Giá trị hóa đơn: ${totalPriceOrder}</p>
+              <p>Tổng số sản phẩm: {totalQuantityOrder}</p>
+              <p>Tổng tiền: ${totalPriceOrder}</p>
             </div>
           </div>
         ) : (
@@ -171,7 +173,7 @@ const Cart = () => {
               <tr key={item.id}>
                 <td>
                   <img
-                    src={`${staticUrl}/food/${item.image}`}
+                    src={require(`../../assets/images/${item.image}`)}
                     alt={item.name}
                     className="img-fluid"
                     style={{ maxWidth: "100px" }}
@@ -210,32 +212,23 @@ const Cart = () => {
       </div>
 
       <div className="text-right pb-5">
-        {/* Nút tiếp tục thêm món ăn */}
         <button className="btn btn-secondary mr-3">
-          <Link to="/menu-page" style={{ color: "white" }}>Tiếp tục thêm món ăn</Link>
+          <Link to="/menu" style={{ color: "white" }}>
+            Tiếp tục thêm món ăn
+          </Link>
         </button>
-
-        {/* Nếu giỏ hàng đã có, hiển thị nút đặt món*/}
-        {totalQuantityCart > 0 && (
-          <>
-            <button
-              className="btn btn-primary mr-3"
-              style={{ color: "white" }}
-              onClick={handleOrder}
-            >
-              Đặt món
-            </button>
-          </>
-        )}
-
-        {/* Nếu đơn hàng đã có, hiển thị nút thanh toán */}
-        {totalQuantityOrder > 0 && (
-          <>
-            <button className="btn btn-primary">
-              <Link to="/get-pay-page" style={{ color: "white" }}>Thanh toán</Link>
-            </button>
-          </>
-        )}
+        <button
+          className="btn btn-primary mr-3"
+          style={{ color: "white" }}
+          onClick={handleOrder}
+        >
+          Đặt món
+        </button>
+        <button className="btn btn-primary">
+          <Link to="/payment" style={{ color: "white" }}>
+            Thanh toán
+          </Link>
+        </button>
       </div>
     </div>
   );
