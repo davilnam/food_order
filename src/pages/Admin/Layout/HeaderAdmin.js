@@ -17,7 +17,7 @@ const HeaderAdmin = () => {
 
     const handleLogout = () => {
         dispatch(logout())        
-        navigate('/'); // Điều hướng người dùng đến trang chính sau khi logout
+        navigate('/home-page'); // Điều hướng người dùng đến trang chính sau khi logout
     }
 
     return (

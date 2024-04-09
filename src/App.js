@@ -18,8 +18,8 @@ import FoodDetail from "./components/detail_food/FoodDetail";
 import Cart from "./components/cart/Cart";
 import ThankYouPage from "./pages/ThankYouPage";
 import Payment from "./components/payment/Payment";
-import OrderDetail from "./pages/Admin/order/OrderDetail"
-import Counter from "./pages/Counter/Counter";
+import OrderDetail from "./pages/Admin/order/OrderDetail";
+import CounterPage from "./pages/Counter/Counter";
 import NotFound from "./components/NotFound";
 import LayoutUser from "./pages/LayoutUser";
 
@@ -31,7 +31,7 @@ const App = () => {
 
   return (
     <Routes>
-        <Route path="/" element={<LayoutUser />}>
+      <Route path="/" element={<LayoutUser />}>
         <Route path="home-page" element={<Home />}></Route>
         <Route path="about-page" element={<PageAbout />}></Route>
         <Route path="blog-page" element={<PagePost />}></Route>
@@ -60,8 +60,7 @@ const App = () => {
         </Route>
       )}
       {isLoggedIn && isCounter && (
-      <Route path="/counter" element={<Counter/>}>        
-      </Route>
+        <Route path="/counter" element={<CounterPage />}></Route>
       )}
       {/* Trang not found */}
       <Route path="not-found" element={<NotFound />} />

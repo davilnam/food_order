@@ -8,7 +8,8 @@ import Comment from "./Comments";
 import "../../styles/css/detail.css";
 
 const FoodDetail = () => {
-  const staticUrl = "http://localhost:8080/api/home/file";
+  const staticUrl = process.env.REACT_APP_API_URL_IMAGE;
+  const app_api_url = process.env.REACT_APP_API_URL;
   const [foodDetail, setFoodDetail] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -21,12 +22,13 @@ const FoodDetail = () => {
 
   useEffect(() => {
     fetchFoodDetail(id);
-    fetchComments(id);
+    // fetchComments(id);
   }, [id]);
 
   const fetchFoodDetail = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/food/get-detail/${id}`);
+      const url = app_api_url + `/api/food/get-detail/${id}`;
+      const response = await fetch(url);
       const data = await response.json();
       setFoodDetail(data);
     } catch (error) {
@@ -34,30 +36,30 @@ const FoodDetail = () => {
     }
   };
 
-  const fetchComments = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:4000/comments/${id}`);
-      const data = await response.json();
-      setComments(data);
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-    }
-  };
+  // const fetchComments = async (id) => {
+  //   try {
+  //     const response = await fetch(`http://localhost:4000/comments/${id}`);
+  //     const data = await response.json();
+  //     setComments(data);
+  //   } catch (error) {
+  //     console.error("Error fetching comments:", error);
+  //   }
+  // };
 
   const handleCommentSubmit = async () => {
-    try {
-      await fetch(`http://localhost:4000/comments/${id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ content: newComment }),
-      });
-      fetchComments(id);
-      setNewComment("");
-    } catch (error) {
-      console.error("Error submitting comment:", error);
-    }
+    // try {
+    //   await fetch(`http://localhost:4000/comments/${id}`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ content: newComment }),
+    //   });
+    //   fetchComments(id);
+    //   setNewComment("");
+    // } catch (error) {
+    //   console.error("Error submitting comment:", error);
+    // }
   };
 
   const handleAddToCart = () => {
@@ -87,7 +89,7 @@ const FoodDetail = () => {
                   className="menu-img img"
                   style={{
                     height: "100%",
-                    backgroundImage: `url(${staticUrl}/food/${foodDetail.image})`,
+                    backgroundImage: `url(${staticUrl}/${foodDetail.image})`,
                   }}
                 ></div>
               </div>

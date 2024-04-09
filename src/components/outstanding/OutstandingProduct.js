@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../actions/actions"; // Import action addToCart
 const OutstandingProduct = () => {
-  const staticUrl = "http://localhost:8080/api/home/file";
+  const staticUrl = process.env.REACT_APP_API_URL_IMAGE;
+  const app_api_url = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
   const [categories, setCategories] = useState([]);
 
@@ -12,7 +13,8 @@ const OutstandingProduct = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/home/category");
+      const url = app_api_url + "/api/home/category";
+      const response = await fetch(url);
       const data = await response.json();
       setCategories(data.data);
     } catch (error) {
@@ -48,7 +50,7 @@ const OutstandingProduct = () => {
                       foodIndex % 2 !== 0 ? "order-md-last" : ""
                     }`}
                     style={{
-                      backgroundImage: `url(${staticUrl}/food/${food.image})`,
+                      backgroundImage: `url(${staticUrl}/${food.image})`,
                     }}
                   ></div>
                   <div className="text d-flex align-items-center productBody">

@@ -6,7 +6,7 @@ import { logout } from "../../actions/actions";
 const HeaderCounter = () => {
   const dispatch = useDispatch();
   let { user } = useSelector((state) => state.app);
-  user = {title: "nam", userId: 2} 
+  // user = {title: "nam", userId: 2} 
 
   const handleLogout = () => {
     dispatch(logout());
@@ -15,7 +15,7 @@ const HeaderCounter = () => {
   return (
     <Navbar color="dark" dark expand="md">
       <div className="container d-flex justify-content-between">
-        <NavbarBrand href="/">Order Management</NavbarBrand>
+        <NavbarBrand href="/counter">Order Management</NavbarBrand>
         {user && (
           <Nav navbar>
             <NavItem>

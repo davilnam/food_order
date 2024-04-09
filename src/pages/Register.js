@@ -146,7 +146,7 @@ const Register = () => {
                   <p className="text-center text-muted mt-5 mb-0">
                     Bạn đã có tài khoản?
                     <NavLink
-                      to="/login"
+                      to="/login-page"
                       className={({ isActive }) => {
                         const activeClass = isActive ? "activeHome" : "";
                         return `fw-bold text-body ${activeClass}`;

@@ -8,7 +8,8 @@ import { useDispatch } from "react-redux";
 import { saveCurrentPath } from "../../../actions/actions";
 
 const ProductManagement = () => {
-  const staticUrl =  process.env.REACT_APP_API_URL_IMAGE;
+  const staticUrl = process.env.REACT_APP_API_URL_IMAGE;
+
   const [categories, setCategories] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -45,20 +46,19 @@ const ProductManagement = () => {
     formData.append("price", food.price);
     formData.append("file", food.image); // Thêm đối tượng File vào FormData
     formData.append("category_name", food.category);
-    
     try {
-        const accessToken = localStorage.getItem("accessToken");
-        const url = app_api_url + "/api/food/add";
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-            body: formData,
-        });
-        // Xử lý response ở đây nếu cần
-        fetchFoods()
-    }catch (error) {
+      const accessToken = localStorage.getItem("accessToken");
+      const url = app_api_url + "/api/food/add";
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: formData,
+      });
+      // Xử lý response ở đây nếu cần
+      fetchFoods();
+    } catch (error) {
       console.error("Error adding food:", error);
       // Xử lý lỗi ở đây nếu cần
     }
@@ -67,38 +67,34 @@ const ProductManagement = () => {
   const handleUpdateFood = async (food) => {
     let file;
     const formData = new FormData();
-    formData.append('id', food.id);
-    formData.append('title', food.title);
-    formData.append('price', food.price);
-    formData.append('material', "About 30 minutes");
-    formData.append('detail', "");
-    formData.append('timeServe', 10);
-    
-    formData.append('category_name', food.category);
-    
+    formData.append("id", food.id);
+    formData.append("title", food.title);
+    formData.append("price", food.price);
+    formData.append("material", "About 30 minutes");
+    formData.append("detail", "");
+    formData.append("timeServe", 10);
 
-    if (food.image instanceof File) {      
-      formData.append('file', food.image); // Thêm đối tượng File vào FormData
-    }else{
+    formData.append("category_name", food.category);
+
+    if (food.image instanceof File) {
+      formData.append("file", food.image); // Thêm đối tượng File vào FormData
+    } else {
       file = new File([""], food.image, { type: "image/jpeg" });
       console.log(file);
-      formData.append('file', file); // Thêm đối tượng File vào FormData
-    }        
+      formData.append("file", file); // Thêm đối tượng File vào FormData
+    }
     try {
       const accessToken = localStorage.getItem("accessToken");
       const url = app_api_url + "/api/food/update";
-      const response = await fetch(
-        url,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: formData
-        }
-      );
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: formData,
+      });
       // Xử lý response ở đây nếu cần
-      fetchFoods()
+      fetchFoods();
     } catch (error) {
       console.error("Error updating food:", error);
       // Xử lý lỗi ở đây nếu cần
@@ -106,7 +102,6 @@ const ProductManagement = () => {
   };
 
   const handleDeleteFood = async (foodId) => {
-    console.log(foodId)
     try {
       const accessToken = localStorage.getItem("accessToken");
       const url = app_api_url + `/api/food/delete/${foodId}`;
@@ -117,7 +112,6 @@ const ProductManagement = () => {
         },
       });
       // Xử lý response ở đây nếu cần
-      fetchFoods()
     } catch (error) {
       console.error("Error deleting food:", error);
       // Xử lý lỗi ở đây nếu cần

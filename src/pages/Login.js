@@ -31,8 +31,10 @@ const Login = () => {
     // const remember = formData.get("remember");
     console.log({email, password})
 
+    const app_api_url = process.env.REACT_APP_API_URL;
     try {
-      const response = await fetch("http://localhost:8080/api/user/login", {
+      const url = app_api_url + "/api/user/login";
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +71,7 @@ const Login = () => {
       } else  if (data.desc === "[ADMIN]"){
         navigate("/counter");
       }else{        
-        navigate("/");
+        navigate("/home-page");
       }
     } catch (error) {
       console.error("Error logging in:", error);
@@ -141,7 +143,7 @@ const Login = () => {
                     <div className="mt-4">
                       Chưa có tài khoản?
                       <NavLink
-                        to="/register"
+                        to="/register-page"
                         className={({ isActive }) => {
                           const activeClass = isActive ? "activeHome" : "";
                           return `${activeClass}`;

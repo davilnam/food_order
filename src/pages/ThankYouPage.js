@@ -18,7 +18,7 @@ const ThankYouPage = () => {
             <p className="lead">
               Cảm ơn bạn đã sử dụng các món ăn của chúng tôi.
             </p>
-            <Link to="/" className="btn btn-primary">
+            <Link to="/home-page" className="btn btn-primary">
               Quay lại trang chính
             </Link>
           </div>
