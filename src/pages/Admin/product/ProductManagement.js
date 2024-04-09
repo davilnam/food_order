@@ -167,6 +167,13 @@ const ProductManagement = () => {
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const formatPriceToVND = (price) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(price);
+  };
+
   return (
     <div className="content">
       <HeaderAdmin />
@@ -243,7 +250,7 @@ const ProductManagement = () => {
                   <td>{food.title}</td>
                   <td>{food.category}</td>
                   {/* Sử dụng thuộc tính category đã được thiết lập */}
-                  <td>{food.price}</td>
+                  <td>{formatPriceToVND(food.price)}</td>
                   <td>
                     {/* Edit button */}
                     <button

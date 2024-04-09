@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart, saveCurrentPath } from "../actions/actions";
 import { Link } from "react-router-dom";
-import { scrollToElement } from '../scrollUtils';
+import { scrollToElement } from "../scrollUtils";
 
-const PageMenu = () => {  
+const PageMenu = () => {
   const staticUrl = process.env.REACT_APP_API_URL_IMAGE;
   const app_api_url = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
@@ -15,9 +15,16 @@ const PageMenu = () => {
     fetchCategories();
     dispatch(saveCurrentPath(window.location.pathname));
     setTimeout(() => {
-      scrollToElement('scrollTarget');
+      scrollToElement("scrollTarget");
     });
   }, []);
+
+  const formatPriceToVND = (price) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(price);
+  };
 
   const fetchCategories = async () => {
     try {
@@ -39,7 +46,6 @@ const PageMenu = () => {
     const foodWithDefaultQuantity = { ...food, quantity: 1 }; // Tạo một bản sao của food với quantity mặc định là 1
     dispatch(addToCart(foodWithDefaultQuantity)); // Dispatch action addToCart với thông tin sản phẩm có số lượng mặc định
   };
-  
 
   return (
     <section id="scrollTarget" className="ftco-section">
@@ -104,7 +110,9 @@ const PageMenu = () => {
                                     </h3>
                                   </div>
                                   <div className="one-forth">
-                                    <span className="price">${food.price}</span>
+                                    <span className="price">
+                                      {formatPriceToVND(food.price)}
+                                    </span>
                                   </div>
                                 </div>
                                 <p className="desc">

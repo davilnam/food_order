@@ -12,6 +12,13 @@ const OutstandingProduct = () => {
     fetchCategories();
   }, []);
 
+  const formatPriceToVND = (price) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(price);
+  };
+
   const fetchCategories = async () => {
     try {
       const url = app_api_url + "/api/home/category";
@@ -65,7 +72,9 @@ const OutstandingProduct = () => {
                           </h3>
                         </div>
                         <div className="one-forth">
-                          <span className="price">${food.price}</span>
+                          <span className="price">
+                            {formatPriceToVND(food.price)}
+                          </span>
                         </div>
                       </div>
                       <p className="desc">

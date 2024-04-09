@@ -100,7 +100,7 @@ const OrderManagement = () => {
                   <td>{order.status ? "Đã phục vụ" : "Chưa phục vụ"}</td>
                   <td>{order.is_pay ? "Đã thanh toán" : "Chưa thanh toán"}</td>
                   <td><Link
-                      to={`/admin/order/get-detail/${order.id}`}
+                      to={`/admin/order/get-detail//${order.id}`}
                       className="btn btn-secondary"
                     >
                       Chi tiết

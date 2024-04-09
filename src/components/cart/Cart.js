@@ -114,6 +114,13 @@ const Cart = () => {
     dispatch(orderItems());    
   };
 
+  const formatPriceToVND = (price) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(price);
+  };
+
   return (
     <div className="container">
       <div className="row">
@@ -142,16 +149,16 @@ const Cart = () => {
                       />
                     </td>
                     <td>{item.title}</td>
-                    <td>${item.price}</td>
+                    <td>{formatPriceToVND(item.price)}</td>
                     <td>{item.quantity}</td>
-                    <td>${item.price * item.quantity}</td>
+                    <td>{formatPriceToVND(item.price * item.quantity)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
             <div className="d-flex justify-content-between">
               <p>Tổng số sản phẩm: {totalQuantityOrder}</p>
-              <p>Tổng tiền: ${totalPriceOrder}</p>
+              <p>Tổng tiền: {formatPriceToVND(totalPriceOrder)}</p>
             </div>
           </div>
         ) : (
@@ -184,7 +191,7 @@ const Cart = () => {
                   />
                 </td>
                 <td>{item.title}</td>
-                <td>${item.price}</td>
+                <td>{formatPriceToVND(item.price)}</td>
                 <td>
                   <input
                     type="number"
@@ -211,7 +218,7 @@ const Cart = () => {
         </table>
         <div className="d-flex justify-content-between">
           <p>Tổng số sản phẩm: {totalQuantityCart}</p>
-          <p>Tổng tiền: ${totalPriceCart}</p>
+          <p>Tổng tiền: {formatPriceToVND(totalPriceCart)}</p>
         </div>
       </div>
 
