@@ -30,7 +30,7 @@ const FoodDetail = () => {
       const url = app_api_url + `/api/food/get-detail/${id}`;
       const response = await fetch(url);
       const data = await response.json();
-      setFoodDetail(data);
+      setFoodDetail(data.data);
     } catch (error) {
       console.error("Error fetching food detail:", error);
     }
