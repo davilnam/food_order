@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { saveCurrentPath } from "../../../actions/actions";
 
 const ProductManagement = () => {
-  const staticUrl = "http://localhost:8080/api/home/file";
+  const staticUrl =  process.env.REACT_APP_API_URL_IMAGE;
   const [categories, setCategories] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -18,6 +18,7 @@ const ProductManagement = () => {
   const [foodsPerPage] = useState(10);
 
   const dispatch = useDispatch();
+  const app_api_url = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     fetchFoods();
@@ -25,7 +26,8 @@ const ProductManagement = () => {
   }, [dispatch]);
 
   const fetchFoods = () => {
-    fetch("http://localhost:8080/api/home/category")
+    const url = app_api_url + "/api/home/category";
+    fetch(url)
       .then((response) => response.json())
       .then((data) => {
         setCategories(data.data);
@@ -46,7 +48,8 @@ const ProductManagement = () => {
     
     try {
         const accessToken = localStorage.getItem("accessToken");
-        const response = await fetch("http://localhost:8080/api/food/add", {
+        const url = app_api_url + "/api/food/add";
+        const response = await fetch(url, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -83,8 +86,9 @@ const ProductManagement = () => {
     }        
     try {
       const accessToken = localStorage.getItem("accessToken");
+      const url = app_api_url + "/api/food/update";
       const response = await fetch(
-        `http://localhost:8080/api/food/update`,
+        url,
         {
           method: "PUT",
           headers: {
@@ -105,7 +109,8 @@ const ProductManagement = () => {
     console.log(foodId)
     try {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await fetch(`http://localhost:8080/api/food/delete/${foodId}`, {
+      const url = app_api_url + `/api/food/delete/${foodId}`;
+      const response = await fetch(url, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -232,7 +237,7 @@ const ProductManagement = () => {
                   <td>{food.id}</td>
                   <td>
                     <img
-                      src={`${staticUrl}/food/${food.image}`}
+                      src={`${staticUrl}/${food.image}`}
                       alt={food.title}
                       style={{
                         width: "100px",

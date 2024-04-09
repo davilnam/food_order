@@ -11,6 +11,8 @@ const OrderManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [ordersPerPage] = useState(10); // Số lượng đơn hàng trên mỗi trang
 
+  const app_api_url = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
     fetchOrders(); // Gọi hàm fetchOrders khi component được tải
@@ -20,7 +22,8 @@ const OrderManagement = () => {
   const fetchOrders = async () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await fetch(`http://localhost:8080/api/order/get-all`, {
+      const url = app_api_url + "/api/order/get-all";
+      const response = await fetch(url, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${accessToken}`,

@@ -3,9 +3,11 @@ import { Link, useParams } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 
 const OrderDetail = () => {
-  const staticUrl = "http://localhost:8080/api/home/file";
+  const staticUrl = process.env.REACT_APP_API_URL_IMAGE;
   const { orderId } = useParams();
   const [orderDetail, setOrderDetail] = useState(null);
+
+  const app_api_url = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     // Gọi API để lấy chi tiết đơn hàng dựa trên orderId
@@ -15,7 +17,8 @@ const OrderDetail = () => {
   const fetchOrderDetail = async (orderId) => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await fetch(`http://localhost:8080/api/order/get-detail/${orderId}`, {
+      const url = app_api_url + `/api/order/get-detail/${orderId}`;
+      const response = await fetch(url, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -77,7 +80,7 @@ const OrderDetail = () => {
                 <Row>
                   <Col xs="12" md="4" className="mb-3 mb-md-0">
                     <img
-                      src={`${staticUrl}/food/${item.image}`}
+                      src={`${staticUrl}/${item.image}`}
                       alt={item.foodName}
                       className="img-fluid"
                     />

@@ -16,13 +16,16 @@ const CategoryManagement = () => {
 
   const dispatch = useDispatch();
 
+  const app_api_url = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     fetchCategories();
     dispatch(saveCurrentPath(window.location.pathname));
   }, [dispatch]);
 
   const fetchCategories = () => {
-    fetch("http://localhost:8080/api/home/category")
+    const url = app_api_url + "/api/home/category"
+    fetch(url)
       .then((response) => response.json())
       .then((data) => {
         setCategories(data.data);
@@ -33,7 +36,8 @@ const CategoryManagement = () => {
   const handleAddCategory = async (categoryName) => {
     try {
       const token = localStorage.getItem("accessToken");
-      const response = await fetch(`http://localhost:8080/api/category/add`, {
+      const url = app_api_url + "/api/category/add"
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +58,8 @@ const CategoryManagement = () => {
   const handleUpdateCategory = async (category) => {
     try {
       const token = localStorage.getItem("accessToken");
-      const response = await fetch(`http://localhost:8080/api/category/update`, {
+      const url = app_api_url + "/api/category/update";
+      const response = await fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +80,8 @@ const CategoryManagement = () => {
   const handleDeleteCategory = async (category) => {
     try {
       const token = localStorage.getItem("accessToken");
-      const response = await fetch(`http://localhost:8080/api/category/delete`, {
+      const url = app_api_url + "/api/category/delete";
+      const response = await fetch(url, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

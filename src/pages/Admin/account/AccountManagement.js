@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import HeaderAdmin from "../Layout/HeaderAdmin";
-import { FaSearch, FaPencilAlt, FaTrash } from "react-icons/fa";
+import { FaSearch, FaTrash } from "react-icons/fa";
 import ModalAddAccount from "./ModalAddAccount";
 import ModalDeleteAccount from "./ModalDeleteAccount";
 import { saveCurrentPath } from "../../../actions/actions";
@@ -14,6 +14,8 @@ const AccountManagement = () => {
 
   const dispatch = useDispatch();
 
+  const app_api_url = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
     fetchAccounts(); // Gọi hàm fetchAccounts khi component được tải
@@ -22,7 +24,8 @@ const AccountManagement = () => {
   // Hàm để gửi yêu cầu GET đến API để lấy danh sách tài khoản
   const fetchAccounts = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/user/get-all");
+      const url = app_api_url + "/api/user/get-all";
+      const response = await fetch(url);
       const data = await response.json();
       if (data.success) {
         setAccounts(data.data);
@@ -48,8 +51,9 @@ const AccountManagement = () => {
 
   const handleApproveAccount = async (accountId) => {
     try {
+      const url = app_api_url + `/account/approve/${accountId}`
       const response = await fetch(
-        `http://localhost:4000/account/approve/${accountId}`,
+        url,
         {
           method: "PUT", // Phương thức PUT để cập nhật trạng thái phê duyệt
         }
@@ -69,8 +73,9 @@ const AccountManagement = () => {
   const handleDeleteAccount = async (accountId) => {
     console.log(accountId);
     try {      
+      const url = app_api_url + `/account/${accountId}`
       const response = await fetch(
-        `http://localhost:4000/account/${accountId}`,
+        url,
         {
           method: "DELETE", // Phương thức DELETE để xóa tài khoản
         }
