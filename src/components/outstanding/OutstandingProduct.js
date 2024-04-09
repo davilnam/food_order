@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../actions/actions"; // Import action addToCart
+import { NavLink } from "react-router-dom";
 const OutstandingProduct = () => {
   const staticUrl = process.env.REACT_APP_API_URL_IMAGE;
   const app_api_url = process.env.REACT_APP_API_URL;
@@ -58,7 +59,9 @@ const OutstandingProduct = () => {
                       <div className="d-flex">
                         <div className="one-half">
                           <h3 className="productName">
-                            <a href="detail_food.html">{food.title}</a>
+                            <NavLink to={`/food-detail/${food.id}`}>
+                              {food.title}
+                            </NavLink>
                           </h3>
                         </div>
                         <div className="one-forth">
