@@ -64,7 +64,7 @@ const ProductManagement = () => {
     }
   };
 
-  const handleUpdateFood = async (food) => {
+  const handleUpdateFood = async (food) => {    
     let file;
     const formData = new FormData();
     formData.append("id", food.id);
@@ -74,7 +74,7 @@ const ProductManagement = () => {
     formData.append("detail", food.detail);
     formData.append("timeServe", food.timeServe);
 
-    formData.append("category_name", food.category);
+    formData.append("category_name", food.category_name);
 
     if (food.image instanceof File) {
       formData.append("file", food.image); // Thêm đối tượng File vào FormData

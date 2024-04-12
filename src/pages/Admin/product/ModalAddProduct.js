@@ -72,6 +72,10 @@ const ModalAddProduct = ({ isOpen, toggle, listCategory, handleSaveFood }) => {
     const { value } = event.target;
     if (key === "category") {
       setSelectedCategory(value);
+      setFood((prevFood) => ({
+        ...prevFood,
+        category: value, // Cập nhật category trong state của food
+      }));
     } else {
       setFood((prevFood) => ({
         ...prevFood,
@@ -92,6 +96,14 @@ const ModalAddProduct = ({ isOpen, toggle, listCategory, handleSaveFood }) => {
   const handleSaveButtonClick = () => {
     handleSaveFood(food);
     toggle();
+    setFood({
+      title: "",
+      detail: "",
+      material: "",
+      price: 0,
+      image: "",
+      category: listCategory.length > 0 ? listCategory[0].name : "" // Reset category về giá trị mặc định nếu có danh sách category
+    });
   };
 
   return (
