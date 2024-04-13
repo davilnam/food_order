@@ -10,7 +10,6 @@ const PageAbout = () => {
 
   useEffect(() => {
     dispatch(saveCurrentPath(window.location.pathname));
-    dispatch(saveCurrentPath(window.location.pathname));
     document.title = 'Thông tin nhà hàng';
     setTimeout(() => {
       scrollToElement('scrollTarget');
