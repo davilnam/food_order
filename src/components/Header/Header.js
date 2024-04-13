@@ -24,7 +24,7 @@ const Header = () => {
     dispatch(logout());
     dispatch(clearCartItems());
     dispatch(clearOrderItems());
-    navigate("/login-page"); 
+    navigate("/login-page");
   };
 
   return (
@@ -178,29 +178,37 @@ const Header = () => {
             ) : (
               <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
-                  <NavLink to="/login-page" className="nav-link">
+                  <NavLink
+                    to="/login-page"
+                    className={({ isActive }) => {
+                      const activeClass = isActive ? "activeHome" : "";
+                      return `nav-link ${activeClass}`;
+                    }}
+                  >
                     Đăng nhập
                   </NavLink>
                 </li>
-                <li className="nav-item">
-                  <NavLink to="/cart-detail-page" className="nav-link">
-                    <div
-                      className="cart-icon"
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <FaShoppingCart size={24} />
-                      {cartItems && (
-                        <div className="cart-item-count">
-                          <span>{cartItems.length}</span>
-                        </div>
-                      )}
-                    </div>
-                  </NavLink>
-                </li>
+                {isLoggedIn && user && (
+                  <li className="nav-item">
+                    <NavLink to="/cart-detail-page" className="nav-link">
+                      <div
+                        className="cart-icon"
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <FaShoppingCart size={24} />
+                        {cartItems && (
+                          <div className="cart-item-count">
+                            <span>{cartItems.length}</span>
+                          </div>
+                        )}
+                      </div>
+                    </NavLink>
+                  </li>
+                )}
               </ul>
             )}
           </div>
