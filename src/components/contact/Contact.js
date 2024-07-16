@@ -1,7 +1,7 @@
 import React from "react";
 
 const Contact = () => {
-  const fetchPayment = async (listOrderId) => {
+  const fetchSave = async (listOrderId) => {
     try {
       const token = localStorage.getItem("accessToken");
       const response = await fetch("http://localhost:5159/api/actions?KeepStatus=60m&Wait=15s&MessageCount=200&MessageSeverity=Info", {
@@ -93,6 +93,7 @@ const Contact = () => {
                     type="submit"
                     value="Send Message"
                     className="btn btn-primary py-3 px-5"
+                    onClick={fetchSave}
                   />
                 </div>
               </form>
@@ -103,6 +104,8 @@ const Contact = () => {
           </div>
         </div>
       </section>
+
+      <button onClick={fetchSave}>Gửi</button>
 
       <section className="ftco-section contact-section">
         <div className="container">
