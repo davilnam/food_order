@@ -90,8 +90,9 @@ const Contact = () => {
                 </div>
                 <div className="form-group">
                   <input
+                  id="send"
                     type="submit"
-                    value="Send Message"
+                    value="Send Message2"
                     className="btn btn-primary py-3 px-5"
                     onClick={fetchSave}
                   />
